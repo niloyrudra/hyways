@@ -11,6 +11,8 @@ import {
   Platform
 } from "react-native";
 import KeyboardAvoidingView from "react-native/Libraries/Components/Keyboard/KeyboardAvoidingView";
+import { SafeAreaView } from 'react-native-safe-area-context';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from "../../config/firebase";
@@ -72,81 +74,89 @@ const SignInScreen = ( {navigation} ) => {
     }
 
   return (
-    <KeyboardAvoidingView
-        style={styles.container}
-        behavior={ Platform.OS === "ios" ? 'padding' : 'height' }
-    >
+    <SafeAreaView style={{ flex: 1 }} mode="margin" edges={['right', 'bottom', 'left']} >
+        {/* <KeyboardAvoidingView
+            style={styles.container}
+            behavior={ Platform.OS === "ios" ? 'padding' : 'height' }
+        > */}
+        <KeyboardAwareScrollView contentContainerStyle={{flex: 1}}>
 
-        <View style={{ marginTop: 40, marginBottom:30 }}>
-            <Image style={styles.image} source={require("../../assets/logo/logo.png")} />
-        </View>
- 
-        <StatusBar style="auto" />
+            <View style={styles.container}>
 
-        <View style={styles.inputViewContainer}>
+                <View style={{ marginTop: 40, marginBottom:30 }}>
+                    <Image style={styles.image} source={require("../../assets/logo/logo.png")} />
+                </View>
+        
+                <StatusBar style="auto" />
 
-            <View>
-                <Text style={styles.inputViewLabel}>Email</Text>
+                <View style={styles.inputViewContainer}>
+
+                    <View>
+                        <Text style={styles.inputViewLabel}>Email</Text>
+                    </View>
+                    <View style={styles.inputView}>
+                        <TextInput
+                            style={{...styles.TextInput, borderColor: emailErrorMessage ? 'red': "#C4C7C4" }}
+                            placeholder="Enter Email"
+                            placeholderTextColor="#003f5c"
+                            onChangeText={(email) => setEmail(email)}
+                            value={email}
+                        />
+                    </View>
+
+                    <View>
+                        <Text style={styles.inputViewLabel}>Password</Text>
+                    </View>
+                    <View style={styles.inputView}>
+                        <TextInput
+                            style={{...styles.TextInput, borderColor: passwordErrorMessage ? 'red': "#C4C7C4" }}
+                            placeholder="Enter Password"
+                            placeholderTextColor="#003f5c"
+                            secureTextEntry={true}
+                            onChangeText={(password) => setPassword(password)}
+                            value={password}
+                        />
+                    </View>
+                </View>
+        
+                <View style={styles.infoViewContainer}>
+
+                    <TouchableOpacity style={{flexDirection:"row",justifyContent:"center"}}>
+                        <Image style={styles.circleCheck} source={require("../../assets/check2-circle.png")} />
+                        <Text style={styles.infoText}>Keep Me logged in</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        onPress={ () => navigation.navigate( "ForgotPassword" ) }
+                    >
+                        <Text style={styles.infoText}>Forgot Password?</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <TouchableOpacity
+                    style={styles.loginBtn}
+                    onPress={signIn}
+                >
+                    <Text style={styles.loginText}>Log in</Text>
+                </TouchableOpacity>
+
+                <View style={{width:297,marginTop:20}}><Text>{errorMessage}</Text></View>
+
+                <TouchableOpacity
+                    style={styles.bottomLink}
+                    onPress={ () => navigation.navigate( "SignUp" ) }
+                >
+                    <Text>Need To Create An Account?</Text>
+                </TouchableOpacity>
+
+                {/* <LineComponent /> */}
+                <View style={{flex:1,backgroundColor:"#00B906",width:192,maxHeight:5,marginBottom:25, marginTop:"auto"}} />
+
             </View>
-            <View style={styles.inputView}>
-                <TextInput
-                    style={{...styles.TextInput, borderColor: emailErrorMessage ? 'red': "#C4C7C4" }}
-                    placeholder="Enter Email"
-                    placeholderTextColor="#003f5c"
-                    onChangeText={(email) => setEmail(email)}
-                    value={email}
-                />
-            </View>
 
-            <View>
-                <Text style={styles.inputViewLabel}>Password</Text>
-            </View>
-            <View style={styles.inputView}>
-                <TextInput
-                    style={{...styles.TextInput, borderColor: passwordErrorMessage ? 'red': "#C4C7C4" }}
-                    placeholder="Enter Password"
-                    placeholderTextColor="#003f5c"
-                    secureTextEntry={true}
-                    onChangeText={(password) => setPassword(password)}
-                    value={password}
-                />
-            </View>
-        </View>
- 
-        <View style={styles.infoViewContainer}>
+        </KeyboardAwareScrollView>
 
-            <TouchableOpacity style={{flexDirection:"row",justifyContent:"center"}}>
-                <Image style={styles.circleCheck} source={require("../../assets/check2-circle.png")} />
-                <Text style={styles.infoText}>Keep Me logged in</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-                onPress={ () => navigation.navigate( "ForgotPassword" ) }
-            >
-                <Text style={styles.infoText}>Forgot Password?</Text>
-            </TouchableOpacity>
-        </View>
-
-        <TouchableOpacity
-            style={styles.loginBtn}
-            onPress={signIn}
-        >
-            <Text style={styles.loginText}>Log in</Text>
-        </TouchableOpacity>
-
-        <View style={{width:297,marginTop:20}}><Text>{errorMessage}</Text></View>
-
-        <TouchableOpacity
-            style={styles.bottomLink}
-            onPress={ () => navigation.navigate( "SignUp" ) }
-        >
-            <Text>Need To Create An Account?</Text>
-        </TouchableOpacity>
-
-        {/* <LineComponent /> */}
-        <View style={{flex:1,backgroundColor:"#00B906",width:192,height:5,bottom:25,position:"absolute"}} />
-
-    </KeyboardAvoidingView>
+    </SafeAreaView>
   )
 }
 
@@ -157,8 +167,7 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: '#fff',
       alignItems: 'center',
-      justifyContent: 'flex-start',
-      position:"relative"
+      justifyContent: 'center',
     },
     inputViewContainer: {
         alignItems: "flex-start"
@@ -223,6 +232,7 @@ const styles = StyleSheet.create({
         // marginLeft:20
     },
     bottomLink: {
-        marginTop:25,
+        marginTop:0,
+        // flex:1
     }
 });

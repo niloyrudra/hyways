@@ -14,6 +14,9 @@ import {
 } from "react-native";
 // import { Alert } from "react-native-web";
 import KeyboardAvoidingView from "react-native/Libraries/Components/Keyboard/KeyboardAvoidingView";
+import { SafeAreaView } from 'react-native-safe-area-context';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
 
 import ErrorMessage from "../../components/ErrorMessage";
 
@@ -107,137 +110,148 @@ const SignUpScreen = ({ navigation }) => {
     // };
 
   return (
-    
-    <KeyboardAvoidingView
-        behavior={ Platform.OS === "ios" ? 'padding' : 'height' }
-        style={styles.container}
-    >
+    <SafeAreaView style={{ flex: 1 }} mode="margin" edges={['right', 'bottom', 'left']} >
+        {/* <KeyboardAvoidingView
+            style={styles.container}
+            behavior={ Platform.OS === "ios" ? 'padding' : 'height' }
+        > */}
+        <KeyboardAwareScrollView contentContainerStyle={{flex: 1}}>
 
-        <View style={{ marginTop: 40, marginBottom:30 }}>
-            <Image style={styles.image} source={require("../../assets/logo/logo.png")} />
-        </View>
+            <View style={styles.container}>
+    {/* // <KeyboardAvoidingView
+    //     behavior={ Platform.OS === "ios" ? 'padding' : 'height' }
+    //     style={styles.container}
+    // > */}
 
-        <StatusBar style="auto" />
+                <View style={{ marginTop: 40, marginBottom:30 }}>
+                    <Image style={styles.image} source={require("../../assets/logo/logo.png")} />
+                </View>
 
-        <View style={styles.inputViewContainer}>
-            <View>
-                <Text style={styles.inputViewLabel}>Email</Text>
-            </View>
-            <View style={styles.inputView}>
-                <TextInput
-                    style={styles.TextInput}
+                <StatusBar style="auto" />
+
+                <View style={styles.inputViewContainer}>
+                    <View>
+                        <Text style={styles.inputViewLabel}>Email</Text>
+                    </View>
+                    <View style={styles.inputView}>
+                        <TextInput
+                            style={styles.TextInput}
+                            disabled={isLoading}
+                            placeholder="Enter Email"
+                            placeholderTextColor="#003f5c"
+                            onChangeText={(email) => setEmail(email)}
+                            value={email}
+                        />
+                    </View>
+
+                    <View>
+                        <Text style={styles.inputViewLabel}>Password</Text>
+                    </View>
+                    <View style={styles.inputView}>
+                        <TextInput
+                            style={styles.TextInput}
+                            disabled={isLoading}
+                            placeholder="Enter Password"
+                            placeholderTextColor="#003f5c"
+                            secureTextEntry={true}
+                            onChangeText={(password) => setPassword(password)}
+                            value={password}
+                        />
+                    </View>
+
+                    <View>
+                        <Text style={styles.inputViewLabel}>Confirm Password</Text>
+                    </View>
+                    <View style={styles.inputView}>
+                        <TextInput
+                            style={styles.TextInput}
+                            disabled={isLoading}
+                            placeholder="Enter Password"
+                            placeholderTextColor="#003f5c"
+                            secureTextEntry={true}
+                            onChangeText={(confirmPassword) => setConfirmPassword(confirmPassword)}
+                            value={confirmPassword}
+                        />
+                    </View>
+                </View>
+
+                <TouchableOpacity
+                    style={styles.signUpBtn}
+                    onPress={registerHandler}
                     disabled={isLoading}
-                    placeholder="Enter Email"
-                    placeholderTextColor="#003f5c"
-                    onChangeText={(email) => setEmail(email)}
-                    value={email}
-                />
+                >
+                    <Text style={styles.signUpText}>Create an Account</Text>
+                </TouchableOpacity>
+
+                {
+                    isLoading &&
+
+                    <View style={styles.preloader}>
+                        <ActivityIndicator size="large" color="#00B906"/>
+                    </View>
+
+                }
+
+                {errorMessage ?
+                    <View style={{width:297,marginTop:20}}>
+                        <ErrorMessage error={errorMessage.replace("Firebase: ", '')} visible={true} />
+                    </View> : null}
+
+                <TouchableOpacity
+                    style={styles.bottomLink}
+                    onPress={() => navigation.navigate( "SignIn" ) }
+                >
+                    <Text>Already Have An Account?</Text>
+                </TouchableOpacity>
+
+
+                <View style={{marginVertical:20,flexDirection:"row",alignItems:"center",justifyContent:"center"}}>
+                    <View style={{backgroundColor:"#00B906",width:123,height:1}} />
+                    <View style={{marginHorizontal:10}}>
+                        <Text>OR</Text>
+                    </View>
+                    <View style={{backgroundColor:"#00B906",width:123,height:1}} />
+                </View>
+
+                <View style={{marginBottom:20,flexDirection:"row",alignItems:"center",justifyContent:"center"}}>
+                    <TouchableOpacity
+                        style={{marginHorizontal:10}}
+                        onPress={() => console.log("GOOGLE Screen")}
+                    >
+                        <Image  style={{width: 34, height:34}} source={require( "../../assets/social-icons/google.png" )} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={{marginHorizontal:10}}
+                        onPress={() => console.log("INSTAGRAM Screen")}
+                    >
+                        <Image  style={{width: 34, height:34}} source={require( "../../assets/social-icons/instagram.png" )} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={{marginHorizontal:10}}
+                        onPress={() => console.log("FACEBOOK SignUp")}
+                    >
+                        <Image  style={{width: 34, height:34}} source={require( "../../assets/social-icons/facebook.png" )} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={{marginHorizontal:10}}
+                        onPress={() => console.log("BOXUSERVOICE SignUp")}
+                    >
+                        <Image  style={{width: 34, height:34}} source={require( "../../assets/social-icons/bxs-user-voice.png" )} />
+                    </TouchableOpacity>
+                </View>
+
+
+                {/* <LineComponent /> */}
+                <View style={{flex:1,backgroundColor:"#00B906",width:192,maxHeight:5,marginBottom:25, marginTop:"auto"}} />
+
             </View>
 
-            <View>
-                <Text style={styles.inputViewLabel}>Password</Text>
-            </View>
-            <View style={styles.inputView}>
-                <TextInput
-                    style={styles.TextInput}
-                    disabled={isLoading}
-                    placeholder="Enter Password"
-                    placeholderTextColor="#003f5c"
-                    secureTextEntry={true}
-                    onChangeText={(password) => setPassword(password)}
-                    value={password}
-                />
-            </View>
+        </KeyboardAwareScrollView>
 
-            <View>
-                <Text style={styles.inputViewLabel}>Confirm Password</Text>
-            </View>
-            <View style={styles.inputView}>
-                <TextInput
-                    style={styles.TextInput}
-                    disabled={isLoading}
-                    placeholder="Enter Password"
-                    placeholderTextColor="#003f5c"
-                    secureTextEntry={true}
-                    onChangeText={(confirmPassword) => setConfirmPassword(confirmPassword)}
-                    value={confirmPassword}
-                />
-            </View>
-        </View>
-
-        <TouchableOpacity
-            style={styles.signUpBtn}
-            onPress={registerHandler}
-            disabled={isLoading}
-        >
-            <Text style={styles.signUpText}>Create an Account</Text>
-        </TouchableOpacity>
-
-        {
-            isLoading &&
-
-            <View style={styles.preloader}>
-                <ActivityIndicator size="large" color="#00B906"/>
-            </View>
-
-        }
-
-        {errorMessage ?
-            <View style={{width:297,marginTop:20}}>
-                <ErrorMessage error={errorMessage.replace("Firebase: ", '')} visible={true} />
-            </View> : null}
-
-        <TouchableOpacity
-            style={styles.bottomLink}
-            onPress={() => navigation.navigate( "SignIn" ) }
-        >
-            <Text>Already Have An Account?</Text>
-        </TouchableOpacity>
-
-
-        <View style={{marginVertical:20,flexDirection:"row",alignItems:"center",justifyContent:"center"}}>
-            <View style={{backgroundColor:"#00B906",width:123,height:1}} />
-            <View style={{marginHorizontal:10}}>
-                <Text>OR</Text>
-            </View>
-            <View style={{backgroundColor:"#00B906",width:123,height:1}} />
-        </View>
-
-        <View style={{marginBottom:20,flexDirection:"row",alignItems:"center",justifyContent:"center"}}>
-            <TouchableOpacity
-                style={{marginHorizontal:10}}
-                onPress={() => console.log("GOOGLE Screen")}
-            >
-                <Image  style={{width: 34, height:34}} source={require( "../../assets/social-icons/google.png" )} />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-                style={{marginHorizontal:10}}
-                onPress={() => console.log("INSTAGRAM Screen")}
-            >
-                <Image  style={{width: 34, height:34}} source={require( "../../assets/social-icons/instagram.png" )} />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-                style={{marginHorizontal:10}}
-                onPress={() => console.log("FACEBOOK SignUp")}
-            >
-                <Image  style={{width: 34, height:34}} source={require( "../../assets/social-icons/facebook.png" )} />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-                style={{marginHorizontal:10}}
-                onPress={() => console.log("BOXUSERVOICE SignUp")}
-            >
-                <Image  style={{width: 34, height:34}} source={require( "../../assets/social-icons/bxs-user-voice.png" )} />
-            </TouchableOpacity>
-        </View>
-
-
-        {/* <LineComponent /> */}
-        <View style={{flex:1,backgroundColor:"#00B906",width:192,height:5,bottom:25,position:"absolute"}} />
-
-    </KeyboardAvoidingView>
+    </SafeAreaView>
   )
 }
 
@@ -245,11 +259,10 @@ export default SignUpScreen
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'flex-start',
-      position:"relative"
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     preloader:{
         marginVertical:20,
