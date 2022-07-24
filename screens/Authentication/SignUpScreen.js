@@ -19,10 +19,6 @@ import ErrorMessage from "../../components/ErrorMessage";
 
 // FireBase
 import { auth } from "../../config/firebase";
-// import { auth } from "../../firebase/firebase-config";
-// import { app } from "../../firebase/firebase-config";
-// import { auth, provider } from "../../firebase/firebase-config"
-
 
 const SignUpScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');

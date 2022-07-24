@@ -1,10 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { AuthenticatedUserProvider } from './navigations/AuthencatedUserProvider';
+
+
 import AppNavigator from "./navigations/AppNavigator"
 
 export default function App() {
-  return (<AppNavigator />);
+  return (
+    <AuthenticatedUserProvider>
+      <AppNavigator />
+    </AuthenticatedUserProvider>
+  );
 }
 
 const styles = StyleSheet.create({

@@ -16,8 +16,8 @@ import HomeStackNavigator from './HomeStackNavigator';
 // const auth = Firebase.auth();
 
 const AppNavigator = () => {
-  // const { user, setUser } = useContext(AuthenticatedUserContext);
-  const [ user, setUser ] = useState(null);
+  const { user, setUser } = useContext(AuthenticatedUserContext);
+  // const [ user, setUser ] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

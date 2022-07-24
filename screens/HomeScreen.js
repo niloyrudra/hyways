@@ -2,9 +2,11 @@ import { StyleSheet, Text, View, Button } from 'react-native'
 import React from 'react'
 import IconButton from '../components/IconButton';
 
-import { auth } from '../config/firebase';
+import { auth, db } from '../config/firebase';
 
 const HomeScreen = () => {
+
+  console.log(db)
 
   const handleSignOut = async () => {
     try {
@@ -16,7 +18,9 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
+    <View style={{marginBottom:25}}>
       <Text>HomeScreen</Text>
+    </View>
       <IconButton
           name='logout'
           size={24}
