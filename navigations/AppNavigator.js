@@ -10,7 +10,8 @@ import { AuthenticatedUserContext } from './AuthencatedUserProvider';
 
 // Navigators
 import AuthStackNavigator from './AuthStackNavigator';
-import HomeStackNavigator from './HomeStackNavigator';
+// import HomeStackNavigator from './HomeStackNavigator';
+import DrawerNavigator from './DrawerNavigator';
 
 
 // const auth = Firebase.auth();
@@ -47,7 +48,7 @@ const AppNavigator = () => {
     <NavigationContainer>
     {
       user ?
-        <HomeStackNavigator/>
+        <DrawerNavigator />
         :
         <AuthStackNavigator />
     }

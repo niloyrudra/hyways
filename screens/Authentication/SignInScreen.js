@@ -79,7 +79,8 @@ const SignInScreen = ( {navigation} ) => {
             style={styles.container}
             behavior={ Platform.OS === "ios" ? 'padding' : 'height' }
         > */}
-        <KeyboardAwareScrollView contentContainerStyle={{flex: 1}}>
+        <KeyboardAwareScrollView contentContainerStyle={{flex: 1}} extraScrollHeight={100} enableOnAndroid={true} 
+   keyboardShouldPersistTaps='handled'>
 
             <View style={styles.container}>
 
