@@ -166,12 +166,13 @@ export default SignInScreen
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: '#ffffff',
       alignItems: 'center',
       justifyContent: 'center',
     },
     inputViewContainer: {
-        alignItems: "flex-start"
+        alignItems: "flex-start",
+        // backgroundColor: '#cccccc',
     },
     inputView: {
         // backgroundColor: "#FFC0CB",
@@ -197,7 +198,6 @@ const styles = StyleSheet.create({
         padding: 10,
         marginLeft: 20,
     },
-
     infoViewContainer: {
         flexDirection: "row",
         justifyContent: "space-between",

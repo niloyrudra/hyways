@@ -15,8 +15,11 @@ import VerifyLicenseScreen from '../screens/VerifyLicenseScreen';
 import StatusScreen from '../screens/StatusScreen';
 import ShowValidityScreen from '../screens/ShowValidityScreen';
 
+import TabNavigator from './TabNavigator';
+
 // Components
 import MenuIcon from '../components/MenuIcon';
+import CameraIcon from '../components/CameraIcon';
 // import HywaysWhite from '../components/HywaysWhite';
 
 // Constants
@@ -51,11 +54,12 @@ const DrawerNavigator = () => {
           fontWeight: 'bold',
         },
         headerLeft:() => (
-          <View
+          <TouchableOpacity
             style={{
               // paddingVertical: 45,
               marginLeft: 36
             }}
+            onPress={ () => navigation.navigate( "Home" ) }
           >
             {/* <HywaysWhite /> */}
             <Image
@@ -65,7 +69,7 @@ const DrawerNavigator = () => {
                 height: 43,
               }}
             />
-          </View>
+          </TouchableOpacity>
         ),
         headerRight: () => (
           <TouchableOpacity
@@ -81,15 +85,31 @@ const DrawerNavigator = () => {
       })}
     >
       <Drawer.Screen name="Home" component={HomeScreen}
-        options={{title:"HOME"}}
+        options={{title:"Home"}}
       />
       <Drawer.Screen name="LicenseList" component={CardListScreen}
         options={{title:"License List"}}
       />
       <Drawer.Screen name="AddLicense" component={AddLicenseScreen}
-        options={{title:"Add License"}}
+        options={{
+          title:"Add License",
+          headerLeft:() => {},
+          headerRight: () => (
+            <TouchableOpacity
+              style={{
+                marginRight: 36
+              }}
+              onPress={() => console.log("Camera")}
+            >
+              <CameraIcon/>
+            </TouchableOpacity>
+          )
+        }}
       />
-      <Drawer.Screen name="AddLicenseFront" component={AddLicenseFrontScreen}
+
+      <Drawer.Screen name="BottomTabs" component={TabNavigator} options={{headerShown:false}} />
+
+      {/* <Drawer.Screen name="AddLicenseFront" component={AddLicenseFrontScreen}
         options={{title:"License Frontface"}}
       />
       <Drawer.Screen name="AddLicenseBack" component={AddLicenseBackScreen}
@@ -109,7 +129,7 @@ const DrawerNavigator = () => {
       />
       <Drawer.Screen name="Status" component={StatusScreen}
         options={{title:"Status"}}
-      />
+      /> */}
     </Drawer.Navigator>
   )
 }
