@@ -16,6 +16,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from "../../config/firebase";
+import colors from "../../constants/colors";
 
 // import Firebase from "../../config/firebase";
 // import { AuthenticatedUserContext }
@@ -90,58 +91,66 @@ const SignInScreen = ( {navigation} ) => {
         
                 <StatusBar style="auto" />
 
-                <View style={styles.inputViewContainer}>
+                <View
+                style={{
+                    backgroundColor: colors.defaultBGColor
+                }}>
 
-                    <View>
-                        <Text style={styles.inputViewLabel}>Email</Text>
-                    </View>
-                    <View style={styles.inputView}>
-                        <TextInput
-                            style={{...styles.TextInput, borderColor: emailErrorMessage ? 'red': "#C4C7C4" }}
-                            placeholder="Enter Email"
-                            placeholderTextColor="#003f5c"
-                            onChangeText={(email) => setEmail(email)}
-                            value={email}
-                        />
-                    </View>
+                    <View style={styles.inputViewContainer}>
 
-                    <View>
-                        <Text style={styles.inputViewLabel}>Password</Text>
-                    </View>
-                    <View style={styles.inputView}>
-                        <TextInput
-                            style={{...styles.TextInput, borderColor: passwordErrorMessage ? 'red': "#C4C7C4" }}
-                            placeholder="Enter Password"
-                            placeholderTextColor="#003f5c"
-                            secureTextEntry={true}
-                            onChangeText={(password) => setPassword(password)}
-                            value={password}
-                        />
-                    </View>
-                </View>
-        
-                <View style={styles.infoViewContainer}>
+                        <View>
+                            <Text style={styles.inputViewLabel}>Email</Text>
+                        </View>
+                        <View style={styles.inputView}>
+                            <TextInput
+                                style={{...styles.TextInput, borderColor: emailErrorMessage ? 'red': "#C4C7C4" }}
+                                placeholder="Enter Email"
+                                placeholderTextColor="#003f5c"
+                                onChangeText={(email) => setEmail(email)}
+                                value={email}
+                            />
+                        </View>
 
-                    <TouchableOpacity style={{flexDirection:"row",justifyContent:"center"}}>
-                        <Image style={styles.circleCheck} source={require("../../assets/check2-circle.png")} />
-                        <Text style={styles.infoText}>Keep Me logged in</Text>
-                    </TouchableOpacity>
+                        <View>
+                            <Text style={styles.inputViewLabel}>Password</Text>
+                        </View>
+                        <View style={styles.inputView}>
+                            <TextInput
+                                style={{...styles.TextInput, borderColor: passwordErrorMessage ? 'red': "#C4C7C4" }}
+                                placeholder="Enter Password"
+                                placeholderTextColor="#003f5c"
+                                secureTextEntry={true}
+                                onChangeText={(password) => setPassword(password)}
+                                value={password}
+                            />
+                        </View>
+                    </View>
+            
+                    <View style={styles.infoViewContainer}>
+
+                        <TouchableOpacity style={{flexDirection:"row",justifyContent:"center"}}>
+                            <Image style={styles.circleCheck} source={require("../../assets/check2-circle.png")} />
+                            <Text style={styles.infoText}>Keep Me logged in</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            onPress={ () => navigation.navigate( "ForgotPassword" ) }
+                        >
+                            <Text style={styles.infoText}>Forgot Password?</Text>
+                        </TouchableOpacity>
+                    </View>
 
                     <TouchableOpacity
-                        onPress={ () => navigation.navigate( "ForgotPassword" ) }
+                        style={styles.loginBtn}
+                        onPress={signIn}
                     >
-                        <Text style={styles.infoText}>Forgot Password?</Text>
+                        <Text style={styles.loginText}>Log in</Text>
                     </TouchableOpacity>
+
+                    <View style={{width:297,marginTop:20}}><Text>{errorMessage}</Text></View>
+
                 </View>
 
-                <TouchableOpacity
-                    style={styles.loginBtn}
-                    onPress={signIn}
-                >
-                    <Text style={styles.loginText}>Log in</Text>
-                </TouchableOpacity>
-
-                <View style={{width:297,marginTop:20}}><Text>{errorMessage}</Text></View>
 
                 <TouchableOpacity
                     style={styles.bottomLink}
@@ -166,13 +175,12 @@ export default SignInScreen
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#ffffff',
+      backgroundColor: colors.defaultBGColor,//'#ffffff',
       alignItems: 'center',
       justifyContent: 'center',
     },
     inputViewContainer: {
         alignItems: "flex-start",
-        // backgroundColor: '#cccccc',
     },
     inputView: {
         // backgroundColor: "#FFC0CB",

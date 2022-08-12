@@ -7,5 +7,6 @@ export default {
     orange: '#f4511e',
     dark: '#000000',
     labelBg: 'rgba(6, 75, 9, 0.2)',
-    shadowClr: 'rgb(160, 159, 159)'
+    shadowClr: 'rgb(160, 159, 159)',
+    defaultBGColor : "#F5F5F5"
 };

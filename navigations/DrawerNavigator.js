@@ -6,25 +6,16 @@ import { createDrawerNavigator, DrawerItemList, DrawerItem } from '@react-naviga
 // Screens
 import HomeScreen from '../screens/HomeScreen';
 import CardListScreen from '../screens/LicenseListScreen';
-import CarDetailScreen from '../screens/CarDetailScreen';
-import AddLicenseFrontScreen from '../screens/AddLicenseFrontScreen';
-import AddLicenseBackScreen from '../screens/AddLicenseBackScreen';
-import AddLicenseDetailScreen from '../screens/AddLicenseDetailScreen';
 import AddLicenseScreen from '../screens/AddLicenseScreen';
-import VerifyLicenseScreen from '../screens/VerifyLicenseScreen';
-import StatusScreen from '../screens/StatusScreen';
-import ShowValidityScreen from '../screens/ShowValidityScreen';
 
 import TabNavigator from './TabNavigator';
 
 // Components
 import MenuIcon from '../components/MenuIcon';
 import CameraIcon from '../components/CameraIcon';
-// import HywaysWhite from '../components/HywaysWhite';
 
 // Constants
 import colors from "../constants/colors"
-// import { Switch } from 'react-native-gesture-handler';
 
 const Drawer = createDrawerNavigator()
 
