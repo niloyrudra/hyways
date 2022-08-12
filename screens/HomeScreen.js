@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Button, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
-// import IconButton from '../components/IconButton';
+import { StackActions } from '@react-navigation/native';
 
 import WelcomeText from "../components/WelcomeText";
 // import SyncTelematicsText from "../components/SyncTelematicsText"
@@ -78,8 +78,22 @@ const HomeScreen = ( {navigation} ) => {
           elevation: 5,
 
         }}
-        // onPress={() => navigation.navigate("AddLicense") }
-        onPress={() => navigation.navigate("BottomTabs") }
+
+        onPress={() => {
+          // navigation.replace("BottomTabs")
+
+          navigation.reset({
+            index:0,
+            routes: [{ name: "BottomTabs" }]
+          })
+          
+          // navigation.dispatch(
+          //   StackActions.replace('BottomTabs', {
+          //     name: 'Home',
+          //   })
+          // );
+
+        }}
       >
         <Text style={{fontSize:24,fontWeight:"bold",color:colors.colorWhite}}>Click Here</Text>
       </TouchableOpacity>

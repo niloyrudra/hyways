@@ -1,20 +1,20 @@
-import { StyleSheet, Text, View, SafeAreaView, FlatList, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, Image, FlatList, TouchableOpacity } from 'react-native'
 import React from 'react'
 
 import WelcomeTextInline from "../components/WelcomeTextInline"
-import CardItemOwn from "../components/CardItemOwn"
-import CardItemFamily from '../components/CardItemFamily'
+
+import colors from '../constants/colors'
 
 const cardList = [
   {
     id:0,
     cardTitle: "Own Card",
-    cardImg: ''
+    cardImg: require( "../assets/license/real_id_own.png" )
   },
   {
     id:1,
     cardTitle: "Family Cards",
-    cardImg: ""
+    cardImg: require("../assets/license/real_id_family.png")
   },
 ];
 
@@ -30,7 +30,8 @@ const LicenseListScreen = ( { navigation } ) => {
               <WelcomeTextInline
                 style={{
                   justifyContent:"flex-start",
-                  alignItems:"flex-start"
+                  alignItems:"flex-start",
+                  marginTop:36
                 }}
               />
             }
@@ -45,8 +46,47 @@ const LicenseListScreen = ( { navigation } ) => {
                       {item.cardTitle}
                   </Text>
 
-                <TouchableOpacity>
-                  { item.id == 0 ? <CardItemOwn style={{marginLeft:-40, marginBottom:-60, marginTop:-10}} /> : <CardItemFamily style={{marginTop: 30}} /> }
+                <TouchableOpacity
+                  style={{
+                    width: 354,
+                    height: 222,
+                    marginTop: 30,
+                    justifyContent:"center",
+                    alignItems:"center"
+                  }}
+                  onPress={ () => navigation.navigate("LicenseDisplay", { item: item }) }
+                >
+                  <Image
+                    style={{
+                      width:332,
+                      height:210
+                    }}
+                    source={item.cardImg}
+                  />
+
+                  <View
+                    style={{
+                      flex:1,
+                      width:"100%",
+                      height:"100%",
+                      backgroundColor: "#000",
+                      opacity: 0.4,
+                      position:"absolute",
+                      borderRadius: 30
+                    }}
+                  />
+                  
+                  <View
+                    style={{
+                      position:"absolute",
+                      zIndex:2,
+                      justifyContent:"center",
+                      alignItems: "center"
+                    }}
+                  >
+                    <Text style={{ color: colors.colorWhite, opacity:1, fontWeight:"800" }}>Tap to view</Text>
+                  </View>
+
                 </TouchableOpacity>
               </View>
                     
@@ -77,10 +117,7 @@ export default LicenseListScreen
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
-    // justifyContent:"center",
-    // alignItems: 'center'
-    padding:30
+    paddingHorizontal:36,
   },
   title: {
       fontSize:20,
@@ -90,15 +127,21 @@ const styles = StyleSheet.create({
   {
       // width: "70%",
       width: 297,
-      borderRadius:30,
       height:45,
-      alignItems:"center",
-      justifyContent:"center",
       marginTop:25,
-      backgroundColor: "#00B906"
+      justifyContent:"center",
+      alignItems:"center",   
+      borderRadius: 35,
+      backgroundColor: colors.primaryColor,
+      
+      shadowOffset: {width: -2,height: 4},
+      shadowColor: colors.shadowClr,
+      shadowOpacity: 0.25,
+      shadowRadius: 3,
+      elevation: 5,
   },
   submitText: {
-      color:"#ffffff",
+      color: colors.colorWhite,
       fontWeight: "900",
       fontSize: 17
   }

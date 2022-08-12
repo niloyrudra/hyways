@@ -8,6 +8,7 @@ import AddLicenseScreen from "../screens/AddLicenseScreen"
 import AddLicenseFrontScreen from "../screens/AddLicenseFrontScreen"
 import AddLicenseBackScreen from "../screens/AddLicenseBackScreen"
 import LicenseListScreen from "../screens/LicenseListScreen"
+// import LicenseDisplayScreen from '../screens/LicenseDisplayScreen'
 
 
 // Components
@@ -33,7 +34,8 @@ const TabNavigator = () => {
             height:70, // 58
             alignItems: "center",
             justifyContent: "center",
-            paddingVertical:20
+            paddingVertical:20,
+            backgroundColor: colors.colorWhite
         },
         drawerPosition:"right",
         drawerStyle:{
@@ -100,34 +102,45 @@ const TabNavigator = () => {
         <Tab.Screen name="CardList" component={LicenseListScreen} options={{
                 title: "Home",
                 tabBarLabel: "Home",
-                tabBarShowLabel: false,
+                // tabBarShowLabel: false,
                 tabBarIcon: ( { focused } ) => ( <HomeTabIcon color={ focused ? colors.primaryColor : colors.inActiveColor } opacityVal={ focused ? 1 : 0.5 } /> ),
                 tabBarActiveTintColor: colors.primaryColor,
-                tabBarItemStyle:{
+                tabBarInactiveTintColor: colors.colorWhite,
+                tabBarItemStyle: {
                     paddingVertical:10
                 },
+                tabBarLabelStyle: {
+                  fontWeight: "800"
+                }
                 // tabBarStyle: { display: "none" },
             }}
         />
         <Tab.Screen name="ScannerDetail" component={AddLicenseFrontScreen} options={{
                 tabBarLabel: "Verify Now",
-                tabBarShowLabel: false,
+                // tabBarShowLabel: false,
                 // tabBarShowLabel:{},
                 tabBarIcon: ( { focused } ) => ( <QRTabIcon color={ focused ? colors.primaryColor : colors.inActiveColor } opacityVal={ focused ? 1 : 0.5 } /> ),
                 tabBarActiveTintColor: colors.primaryColor,
+                tabBarInactiveTintColor: colors.colorWhite,
                 tabBarItemStyle:{
                     paddingVertical:10
+                },
+                tabBarLabelStyle: {
+                  fontWeight: "800"
                 }
             }}
          />
         <Tab.Screen name="Scanner" component={AddLicenseBackScreen} options={{
                 tabBarLabel: "Scan",
-                // tabBarShowLabel: ({focused}) => focused ? true : false,
-                tabBarShowLabel: false,
+                // tabBarShowLabel: false,
                 tabBarIcon: ( { focused } ) => ( <BXBarCodeTabIcon color={ focused ? colors.primaryColor : colors.inActiveColor } opacityVal={ focused ? 1 : 0.5 } /> ),
                 tabBarActiveTintColor: colors.primaryColor,
+                tabBarInactiveTintColor: colors.colorWhite,
                 tabBarItemStyle:{
                     paddingVertical:10
+                },
+                tabBarLabelStyle: {
+                  fontWeight: "800"
                 }
             }}
          />
@@ -135,13 +148,16 @@ const TabNavigator = () => {
                 tabBarLabel: "Status",
                 tabBarIcon: ( { focused } ) => ( <StatusTabIcon color={ focused ? colors.primaryColor : colors.inActiveColor } opacityVal={ focused ? 1 : 0.5 } /> ),
                 tabBarActiveTintColor: colors.primaryColor,
-                tabBarShowLabel: false,
+                tabBarInactiveTintColor: colors.colorWhite,
                 tabBarIconStyle:{
                     // marginTop:-10,
                     marginBottom:10
                 },
                 tabBarItemStyle:{
                     paddingVertical:10
+                },
+                tabBarLabelStyle: {
+                  fontWeight: "800"
                 }
             }}
          />

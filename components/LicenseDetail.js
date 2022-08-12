@@ -6,6 +6,9 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 // Components
 import FormTextInput from "./FormTextInput";
 
+// Constant
+import colors from "../constants/colors";
+
 const formValues = [
     { idx:0, label: 'First Name on License', placeholder: 'First Name', name: 'firstName' },
     { idx:1, label: 'Middle Name on License', placeholder: 'Middle Name', name: 'middleName' },
@@ -69,52 +72,6 @@ export default function LicenseDetail() {
 
         </KeyboardAwareScrollView>
 
-        {/* <FlatList
-            data={formValues}
-            showsVerticalScrollIndicator={false}
-            keyExtractor={(item) => item.idx }
-            renderItem={({item}) => (
-                <>
-                    <View
-                        style={{marginBottom:5}}
-                    >
-                        <Text 
-                            style={styles.inputLabel}
-                        >
-                            {item.label}
-                        </Text>
-                    </View>
-                    <Controller
-                        control={control}
-                        rules={{
-                        maxLength: 100,
-                        }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                        <TextInput
-                            style={styles.input}
-                            placeholder={item.placeholder}
-                            onBlur={onBlur}
-                            onChangeText={ text => onChange(text) }
-                            value={value}
-                        />
-                        )}
-                        name={item.name}
-                    />
-                    {errors[item.name] && <Text>This is required.</Text>}
-
-
-                </>
-            )}
-            ListFooterComponent={() => (
-                <TouchableOpacity
-                    style={styles.submitBtn}
-                    onPress={handleSubmit(onSubmit)}
-                >
-                    <Text style={styles.submitText}>Add License</Text>
-                </TouchableOpacity>
-            )}
-        /> */}
-
     </SafeAreaView>
   );
 }
@@ -122,6 +79,9 @@ export default function LicenseDetail() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
     },
     inner: {
         flex: 1,
@@ -129,35 +89,22 @@ const styles = StyleSheet.create({
         width:"100%",
         justifyContent: 'space-around',
     },
-    // inputLabel: {
-    //     fontWeight: "500",
-    //     fontSize: 17,
-    //     marginLeft: 20,
-    //     marginBottom: 5
-    // },
-    // input: {
-    //     // backgroundColor: "#FFC0CB",
-    //     backgroundColor: "transparent",
-    //     borderRadius: 30,
-    //     // width: "70%",
-    //     width: 297,
-    //     height: 45,
-    //     marginBottom: 10,
-    //     alignItems: "flex-start",
-    //     borderWidth: 1,
-    //     borderColor: "#C4C7C4",
-    //     paddingHorizontal: 20
-    // },
     submitBtn:
     {
         // width: "70%",
         width: 297,
-        borderRadius:30,
         height:45,
-        alignItems:"center",
-        justifyContent:"center",
         marginTop:25,
-        backgroundColor: "#00B906"
+        justifyContent:"center",
+        alignItems:"center",   
+        borderRadius: 35,
+        backgroundColor: colors.primaryColor,
+        
+        shadowOffset: {width: -2,height: 4},
+        shadowColor: colors.shadowClr,
+        shadowOpacity: 0.25,
+        shadowRadius: 3,
+        elevation: 5,
     },
     submitText: {
         color:"#ffffff",

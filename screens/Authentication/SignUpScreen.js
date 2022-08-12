@@ -143,6 +143,7 @@ const SignUpScreen = ({ navigation }) => {
                                 style={styles.TextInput}
                                 disabled={isLoading}
                                 placeholder="Enter Email"
+                                keyboardType="email-address"
                                 placeholderTextColor="#003f5c"
                                 onChangeText={(email) => setEmail(email)}
                                 value={email}

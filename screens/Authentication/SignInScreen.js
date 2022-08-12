@@ -105,6 +105,7 @@ const SignInScreen = ( {navigation} ) => {
                             <TextInput
                                 style={{...styles.TextInput, borderColor: emailErrorMessage ? 'red': "#C4C7C4" }}
                                 placeholder="Enter Email"
+                                keyboardType="email-address"
                                 placeholderTextColor="#003f5c"
                                 onChangeText={(email) => setEmail(email)}
                                 value={email}

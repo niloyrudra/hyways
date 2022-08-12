@@ -7,7 +7,7 @@ import { createDrawerNavigator, DrawerItemList, DrawerItem } from '@react-naviga
 import HomeScreen from '../screens/HomeScreen';
 import CardListScreen from '../screens/LicenseListScreen';
 import AddLicenseScreen from '../screens/AddLicenseScreen';
-
+import LicenseDisplayScreen from '../screens/LicenseDisplayScreen';
 import TabNavigator from './TabNavigator';
 
 // Components
@@ -24,8 +24,6 @@ const DrawerNavigator = () => {
   return (
     <Drawer.Navigator
       drawerContent={ props => <DrawerContent { ...props } /> }
-      // drawerContentOptions={{
-      // }} // Deprecated
       screenOptions={({route, navigation}) => ({
         // drawerType:"back",
 
@@ -47,12 +45,10 @@ const DrawerNavigator = () => {
         headerLeft:() => (
           <TouchableOpacity
             style={{
-              // paddingVertical: 45,
               marginLeft: 36
             }}
             onPress={ () => navigation.navigate( "Home" ) }
           >
-            {/* <HywaysWhite /> */}
             <Image
               source={require( "../assets/logo/Hyways-white.png" )}
               style={{
@@ -99,28 +95,12 @@ const DrawerNavigator = () => {
       />
 
       <Drawer.Screen name="BottomTabs" component={TabNavigator} options={{headerShown:false}} />
+      <Drawer.Screen name="LicenseDisplay" component={LicenseDisplayScreen} options={{
+        title: "Valid",
+        headerLeft:() => {},
+        headerRight:() => {},
+      }} />
 
-      {/* <Drawer.Screen name="AddLicenseFront" component={AddLicenseFrontScreen}
-        options={{title:"License Frontface"}}
-      />
-      <Drawer.Screen name="AddLicenseBack" component={AddLicenseBackScreen}
-        options={{title:"License Backface"}}
-      />
-      <Drawer.Screen name="AddLicenseDetail" component={AddLicenseDetailScreen}
-        options={{title:"Add License Detail"}}
-      />
-      <Drawer.Screen name="CarDetail" component={CarDetailScreen}
-        options={{title:"Car Detail"}}
-      />
-      <Drawer.Screen name="VerifyLicense" component={VerifyLicenseScreen}
-        options={{title:"Verification"}}
-      />
-      <Drawer.Screen name="ShowValidity" component={ShowValidityScreen}
-        options={{title:"Valid"}}
-      />
-      <Drawer.Screen name="Status" component={StatusScreen}
-        options={{title:"Status"}}
-      /> */}
     </Drawer.Navigator>
   )
 }
@@ -160,13 +140,13 @@ const DrawerContent = ( { navigation } ) => {
 
         </View>
 
-        <CustomDrawerItem label="Sync with a telematic" onPress={() => navigation.navigate("Home")} />
+        <CustomDrawerItem label="Sync with a telematic" onPress={() => navigation.navigate("BottomTabs", { tab: "Home" })} />
 
-        <CustomDrawerItem label="Add More Vehicle" onPress={() => navigation.navigate("AddLicense")} />
+        <CustomDrawerItem label="Add More Vehicle" onPress={() => navigation.navigate("BottomTabs")} />
 
-        <CustomDrawerItem label="Track Your Car" onPress={() => navigation.navigate("CarDetail")} />
+        <CustomDrawerItem label="Track Your Car" onPress={() => navigation.navigate("BottomTabs")} />
 
-        <CustomDrawerItem label="Disconnect Telematic" onPress={() => navigation.navigate("Home")} />
+        <CustomDrawerItem label="Disconnect Telematic" onPress={() => navigation.navigate("BottomTabs")} />
 
         {/* <DrawerItem
           label="Home"
