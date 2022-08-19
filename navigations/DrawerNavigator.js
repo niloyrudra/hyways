@@ -6,8 +6,8 @@ import { createDrawerNavigator, DrawerItemList, DrawerItem } from '@react-naviga
 // Screens
 import HomeScreen from '../screens/HomeScreen';
 import CardListScreen from '../screens/LicenseListScreen';
-import AddLicenseScreen from '../screens/AddLicenseScreen';
-import LicenseDisplayScreen from '../screens/LicenseDisplayScreen';
+// import AddLicenseScreen from '../screens/AddLicenseScreen';
+import CarDetailScreen from "../screens/CarDetailScreen"
 import TabNavigator from './TabNavigator';
 
 // Components
@@ -24,52 +24,54 @@ const DrawerNavigator = () => {
   return (
     <Drawer.Navigator
       drawerContent={ props => <DrawerContent { ...props } /> }
-      screenOptions={({route, navigation}) => ({
-        // drawerType:"back",
+      screenOptions={({route, navigation}) => {
 
-        // overlayColor:"red",
-        drawerPosition:"right",
-        drawerStyle:{
-          width: '65%',
-          backgroundColor: colors.primaryColorTrans,
-        },
-        headerStyle: {
-          backgroundColor: colors.primaryColor,
-          height:80
-        },
-        headerTintColor: colors.colorWhite,
-        headerTitleAlign: "center",
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
-        headerLeft:() => (
-          <TouchableOpacity
-            style={{
-              marginLeft: 36
-            }}
-            onPress={ () => navigation.navigate( "Home" ) }
-          >
-            <Image
-              source={require( "../assets/logo/Hyways-white.png" )}
+        return ({
+          // drawerType:"back",
+          // overlayColor:"red",
+          drawerPosition:"right",
+          drawerStyle:{
+            width: '65%',
+            backgroundColor: colors.primaryColorTrans,
+          },
+          headerStyle: {
+            backgroundColor: colors.primaryColor,
+            height:80
+          },
+          headerTintColor: colors.colorWhite,
+          headerTitleAlign: "center",
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+          headerLeft:() => (
+            <TouchableOpacity
               style={{
-                width: 100,
-                height: 43,
+                marginLeft: 36
               }}
-            />
-          </TouchableOpacity>
-        ),
-        headerRight: () => (
-          <TouchableOpacity
-            style={{
-              // paddingVertical: 45,
-              marginRight: 36
-            }}
-            onPress={() => navigation.toggleDrawer() }
-          >
-            <MenuIcon/>
-          </TouchableOpacity>
-        )
-      })}
+              onPress={ () => navigation.navigate( "Home" ) }
+            >
+              <Image
+                source={require( "../assets/logo/Hyways-white.png" )}
+                style={{
+                  width: 100,
+                  height: 43,
+                }}
+              />
+            </TouchableOpacity>
+          ),
+          headerRight: () => (
+            <TouchableOpacity
+              style={{
+                // paddingVertical: 45,
+                marginRight: 36
+              }}
+              onPress={() => navigation.toggleDrawer() }
+            >
+              <MenuIcon/>
+            </TouchableOpacity>
+          )
+        })
+      }}
     >
       <Drawer.Screen name="Home" component={HomeScreen}
         options={{title:"Home"}}
@@ -77,7 +79,7 @@ const DrawerNavigator = () => {
       <Drawer.Screen name="LicenseList" component={CardListScreen}
         options={{title:"License List"}}
       />
-      <Drawer.Screen name="AddLicense" component={AddLicenseScreen}
+      {/* <Drawer.Screen name="AddLicense" component={AddLicenseScreen}
         options={{
           title:"Add License",
           headerLeft:() => {},
@@ -92,22 +94,28 @@ const DrawerNavigator = () => {
             </TouchableOpacity>
           )
         }}
-      />
+      /> */}
 
       <Drawer.Screen name="BottomTabs" component={TabNavigator} options={{headerShown:false}} />
-      <Drawer.Screen name="LicenseDisplay" component={LicenseDisplayScreen} options={{
+      
+      <Drawer.Screen name="CarDetail" component={CarDetailScreen} options={{
+        title:"Card Detail"
+      }} />
+
+      {/* <Drawer.Screen name="LicenseDisplay" component={LicenseDisplayScreen} options={{
         title: "Valid",
         headerLeft:() => {},
         headerRight:() => {},
-      }} />
+      }} /> */}
 
     </Drawer.Navigator>
   )
 }
 
-const DrawerContent = ( { navigation } ) => {
+const DrawerContent = ( { navigation, route } ) => {
   const [ isEnabled, setIsEnabled ] = React.useState(false)
   const [ isSearchTerm, setIsSearchTerm ] = React.useState('')
+
   return (
       <View style={{flex:1}}>
       
@@ -140,13 +148,13 @@ const DrawerContent = ( { navigation } ) => {
 
         </View>
 
-        <CustomDrawerItem label="Sync with a telematic" onPress={() => navigation.navigate("BottomTabs", { tab: "Home" })} />
+        <CustomDrawerItem label="Sync with a telematic" onPress={() => navigation.navigate("Home")} />
 
-        <CustomDrawerItem label="Add More Vehicle" onPress={() => navigation.navigate("BottomTabs")} />
+        <CustomDrawerItem label="Add More Vehicle" onPress={() => navigation.navigate( "CardList" )} />
 
-        <CustomDrawerItem label="Track Your Car" onPress={() => navigation.navigate("BottomTabs")} />
+        <CustomDrawerItem label="Track Your Car" onPress={() => navigation.navigate("CarDetail")} />
 
-        <CustomDrawerItem label="Disconnect Telematic" onPress={() => navigation.navigate("BottomTabs")} />
+        <CustomDrawerItem label="Disconnect Telematic" onPress={() => navigation.navigate("Home")} />
 
         {/* <DrawerItem
           label="Home"

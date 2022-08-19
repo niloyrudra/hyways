@@ -4,6 +4,7 @@ import React from 'react'
 import WelcomeTextInline from "../components/WelcomeTextInline"
 
 import colors from '../constants/colors'
+import LicenseListCard from '../components/LicenseListCard';
 
 const cardList = [
   {
@@ -37,58 +38,7 @@ const LicenseListScreen = ( { navigation } ) => {
             }
             renderItem={({item}) => (
                
-              <View
-                  style={{marginVertical:30}}
-              >
-                  <Text 
-                      style={styles.title}
-                  >
-                      {item.cardTitle}
-                  </Text>
-
-                <TouchableOpacity
-                  style={{
-                    width: 354,
-                    height: 222,
-                    marginTop: 30,
-                    justifyContent:"center",
-                    alignItems:"center"
-                  }}
-                  onPress={ () => navigation.navigate("LicenseDisplay", { item: item }) }
-                >
-                  <Image
-                    style={{
-                      width:332,
-                      height:210
-                    }}
-                    source={item.cardImg}
-                  />
-
-                  <View
-                    style={{
-                      flex:1,
-                      width:"100%",
-                      height:"100%",
-                      backgroundColor: "#000",
-                      opacity: 0.4,
-                      position:"absolute",
-                      borderRadius: 30
-                    }}
-                  />
-                  
-                  <View
-                    style={{
-                      position:"absolute",
-                      zIndex:2,
-                      justifyContent:"center",
-                      alignItems: "center"
-                    }}
-                  >
-                    <Text style={{ color: colors.colorWhite, opacity:1, fontWeight:"800" }}>Tap to view</Text>
-                  </View>
-
-                </TouchableOpacity>
-              </View>
+              <LicenseListCard item={item} navigation={navigation} />
                     
             )}
             ListFooterComponent={() => (
@@ -101,7 +51,7 @@ const LicenseListScreen = ( { navigation } ) => {
               >
                 <TouchableOpacity
                     style={styles.submitBtn}
-                    onPress={() => navigation.navigate("Status")}
+                    onPress={() => navigation.navigate("VerificationStatus")}
                 >
                     <Text style={styles.submitText}>Add License</Text>
                 </TouchableOpacity>
@@ -118,10 +68,6 @@ export default LicenseListScreen
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal:36,
-  },
-  title: {
-      fontSize:20,
-      fontWeight:"700"
   },
   submitBtn:
   {

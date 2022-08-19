@@ -82,10 +82,12 @@ const HomeScreen = ( {navigation} ) => {
         onPress={() => {
           // navigation.replace("BottomTabs")
 
-          navigation.reset({
-            index:0,
-            routes: [{ name: "BottomTabs" }]
-          })
+          navigation.navigate("BottomTabs")
+
+          // navigation.reset({
+          //   index:0,
+          //   routes: [{ name: "BottomTabs" }]
+          // })
           
           // navigation.dispatch(
           //   StackActions.replace('BottomTabs', {

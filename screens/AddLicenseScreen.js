@@ -2,16 +2,25 @@ import { StyleSheet, Text, View, Button } from 'react-native'
 import React, { useEffect, useState } from 'react'
 
 import LicenseDetail from '../components/LicenseDetail';
-import StatusComponent from "../components/StatusComponent"
+import StatusComponent from "./StatusScreen"
 
 const AddLicenseScreen = () => {
 
-  const [ isSunmitted, setIsSubmitted ] = useState(true)
+  const [ isSubmitted, setIsSubmitted ] = useState(false)
+  const [ data, setData ] = useState(null)
+
+  React.useEffect(() => {
+    if(data?.firstName) setIsSubmitted(true)
+    console.log(data)
+    return () => {
+      setIsSubmitted(false)
+    }
+  }, [data]);
 
   return (
     <>
       {
-        isSunmitted ? <StatusComponent /> : <LicenseDetail/>
+        isSubmitted ? <StatusComponent data={data} /> : <LicenseDetail setData={setData} />
       }
     </>
   )

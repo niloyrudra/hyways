@@ -23,6 +23,7 @@ export default {
       "supportsTablet": true
     },
     "android": {
+      "package":"hyways.app",
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo/logo.png",
         "backgroundColor": "#FFFFFF"

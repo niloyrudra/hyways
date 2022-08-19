@@ -16,9 +16,9 @@ const licenseData = [
     {id: 3, heading: "Endorsements", value: "HVPE"},
 ]
 
-const LicenseDisplayScreen = ({ navigation, route}) => {
+const LicenseDisplayScreen = ({ navigation, route }) => {
 
-    const [ license, setLicense ] = React.useState( null )
+    const [ license, setLicense ] = React.useState( route.params?.item )
 
     React.useEffect(() => {
         console.log(route)
@@ -206,7 +206,8 @@ const LicenseDisplayScreen = ({ navigation, route}) => {
 
                             }}
 
-                            onPress={() => navigation.navigate( "BottomTabs" )}
+                            // onPress={() => navigation.navigate( "BottomTabs" )}
+                            onPress={() => navigation.goBack() }
                         >
                             <CloseIcon/>
                             

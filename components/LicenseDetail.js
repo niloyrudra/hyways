@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, SafeAreaView, FlatList, Text, View, TextInput, Button, Alert, TouchableOpacity } from "react-native";
+import { StyleSheet, Dimensions, SafeAreaView, FlatList, Text, View, TextInput, Button, Alert, TouchableOpacity } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
@@ -24,7 +24,7 @@ const formValues = [
     { idx:11, label: 'Expiration Date', placeholder: 'Enter Date', name: 'expirationDate' },
 ];
 
-export default function LicenseDetail() {
+export default function LicenseDetail( { setData } ) {
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
         firstName: '',
@@ -41,36 +41,76 @@ export default function LicenseDetail() {
         expirationDate: '',
     }
   });
-  const onSubmit = data => console.log(data);
+  const onSubmit = data => {
+      setData(data)
+    //   setIsSubmitted(true)
+    };
+
+//   console.log(Dimensions.get("screen").height)
+//   console.log(Dimensions.get("window").height)
+
+  const validationHandler = () => {
+    //   return firstName != '' && middleName != '' &&  lastName != '' &&  suffixLicense != '' && licenseNumber != '' && vehicelNumber != '' && brandName != '' && model != '' && year != '' && motorVehicelIssuedNumber != '' && policyNumber != '' && expirationDate != ''
+    return true
+  }
 
   return (
     <SafeAreaView style={styles.container}>
 
         <KeyboardAwareScrollView>
-
             <View style={styles.inner}>
-
                 {
                     formValues && formValues.map( item => <FormTextInput key={item.idx} control={control} errors={errors} label={item.label} name={item.name} placeholder={item.placeholder} isRequired={true} />)
                 }
-
             </View>
 
             <View
                 style={{
                     // position:"absolute",
-                    marginBottom:30
+                    // width: Dimensions.get("screen").width,
+                    // height: 84,
+
+                    // justifyContent:"center",
+                    // alignItems:"center",
+                    // // top: Dimensions.get("screen").height
+                    // top: Dimensions.get("window").height - 256,
+                    // backgroundColor: "#ffffff99", //colors.colorWhiteTrans, //colors.colorWhiteTrans
+                    // zIndex:33333
+                    marginBottom: 30
                 }}
             >
                 <TouchableOpacity
                     style={styles.submitBtn}
                     onPress={handleSubmit(onSubmit)}
+                    // disabled={validationHandler}
                 >
                     <Text style={styles.submitText}>Add License</Text>
                 </TouchableOpacity>
             </View>
-
         </KeyboardAwareScrollView>
+
+        {/* <View
+            style={{
+                position:"absolute",
+                width: Dimensions.get("screen").width,
+                height: 84,
+
+                justifyContent:"center",
+                alignItems:"center",
+                top: Dimensions.get("window").height - 256,
+                backgroundColor: "#ffffff99", //colors.colorWhiteTrans, //colors.colorWhiteTrans
+                zIndex:33333
+            }}
+        >
+            <TouchableOpacity
+                style={styles.submitBtn}
+                onPress={handleSubmit(onSubmit)}
+                disabled={validationHandler}
+            >
+                <Text style={styles.submitText}>Add License</Text>
+            </TouchableOpacity>
+        </View> */}
+        
 
     </SafeAreaView>
   );
@@ -88,13 +128,14 @@ const styles = StyleSheet.create({
         paddingVertical: 24,
         width:"100%",
         justifyContent: 'space-around',
+        // marginBottom:65
     },
     submitBtn:
     {
         // width: "70%",
         width: 297,
         height:45,
-        marginTop:25,
+        // marginTop:25,
         justifyContent:"center",
         alignItems:"center",   
         borderRadius: 35,

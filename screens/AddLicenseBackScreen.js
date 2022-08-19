@@ -25,11 +25,13 @@ const AddLicenseBackScreen = () => {
     }
 
     if (hasPermission === null) {
-        return (<Text>Requesting for camera permission</Text>);
+        return (<View style={styles.container}><Text>Requesting for camera permission</Text></View>);
     }
     if (hasPermission === false) {
-        return (<Text>No access to camera</Text>);
+        return (<View style={styles.container}><Text>No access to camera</Text></View>);
     }
+
+
     return (
         <View style={styles.container}>
 
@@ -49,11 +51,21 @@ const AddLicenseBackScreen = () => {
             >Scan Your Code From Another Device</Text>
             </View>
 
-            <BarCodeScanner
-            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-            // style={StyleSheet.absoluteFillObject}
-            style={styles.scanner}
-            />
+            <View
+                    style={{
+                    flex:1,
+                    width: "100%" ,
+                    minHeight: 300,
+                    backgroundColor:"#222",
+                    overflow:"hidden"
+                }}
+            >
+
+                <BarCodeScanner
+                    onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                    style={{...StyleSheet.absoluteFillObject, top:-180, bottom:-180 }}
+                />
+            </View>
 
             <View
             style={{
@@ -61,14 +73,14 @@ const AddLicenseBackScreen = () => {
                 // width: 165,
             }}
             >
-            <Text
-                style={{
-                fontSize: 15,
-                lineHeight: 15,
-                fontWeight: "800",
-                textAlign: "center"
-                }}
-            >Scanning Will Happen Automatically</Text>
+                <Text
+                    style={{
+                    fontSize: 15,
+                    lineHeight: 15,
+                    fontWeight: "800",
+                    textAlign: "center"
+                    }}
+                >Scanning Will Happen Automatically</Text>
             </View>
 
             <View
@@ -99,9 +111,11 @@ const styles = StyleSheet.create({
       padding: 30
     },
     scanner: {
-      flex:1,
-      width: '100%',
-      maxHeight: 354,
-      backgroundColor: '#99999975'
+        flex:1,
+        width: '100%',
+        //   maxHeight: 354,
+        backgroundColor: '#99999975',
+        top:-200,
+        bottom:-200,
     }
   })

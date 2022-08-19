@@ -2,12 +2,12 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import CheckedIcon from './CheckedIcon'
-import DefaultUserAvatar from './DefaultUserAvatar'
-import CircleAround from './CircleAround'
-import TabScreenHeading from './TabScreenHeading'
+import CheckedIcon from '../components/CheckedIcon'
+import DefaultUserAvatar from '../components/DefaultUserAvatar'
+import CircleAround from '../components/CircleAround'
+import TabScreenHeading from '../components/TabScreenHeading'
 
-const StatusComponent = () => {
+const StatusScreen = () => {
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -64,7 +64,7 @@ const StatusComponent = () => {
   );
 }
 
-export default StatusComponent
+export default StatusScreen
 
 const styles = StyleSheet.create({
   container:{
