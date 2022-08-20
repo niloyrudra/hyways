@@ -69,8 +69,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal:36,
   },
-  submitBtn:
-  {
+  submitBtn: {
       // width: "70%",
       width: 297,
       height:45,

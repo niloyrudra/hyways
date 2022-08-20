@@ -22,7 +22,7 @@ const LicenseListCard = ( { item, navigation } ) => {
                 justifyContent:"center",
                 alignItems:"center"
             }}
-            onPress={ () => navigation.navigate("LicenseDisplay", { item: item }) }
+            onPress={ () => navigation.navigate("LicenseDisplay", item ) }
         >
             <>
                 <Image
