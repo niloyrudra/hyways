@@ -12,6 +12,14 @@ const LicenseBackCaptureScreen = ( { navigation } ) => {
     const [ hasPermission, setHasPermission ] = useState(null);
     const [ scanned, setScanned ] = useState(false);
 
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            setScanned(false)
+        });
+    
+        return unsubscribe;
+    }, [navigation]);
+
     useEffect( () => {
         const getBarCodeScannerPermission = async () => {
         const { status } = await BarCodeScanner.requestPermissionsAsync();

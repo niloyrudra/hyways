@@ -16,18 +16,18 @@ const licenseData = [
     {id: 3, heading: "Endorsements", value: "HVPE"},
 ]
 
-const LicenseDisplayScreen = ({ navigation }) => {
+const LicenseDisplayScreen = ({ navigation, route }) => {
 
-    // const [ license, setLicense ] = React.useState( route.params?.item )
+    const [ license, setLicense ] = React.useState( route.params )
 
-    // React.useEffect(() => {
-    //     console.log(route)
-    //     if( route.params.item ) setLicense( route.params.item )
+    React.useEffect(() => {
 
-    //     return () => {
-    //         setLicense( null )
-    //     }
-    // }, [route.params.item.id]);
+        if( route.params ) setLicense( route.params )
+
+        return () => {
+            setLicense( null )
+        }
+    }, [route.params.id]);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -57,8 +57,8 @@ const LicenseDisplayScreen = ({ navigation }) => {
                                         width:"100%",
                                         height: 130 
                                     }}
-                                    // source={ license.cardImg }
-                                    source={ navigation.getParam("cardImg") }
+                                    source={ license.cardImg }
+                                    // source={ navigation.getParam("cardImg") }
                                 />
 
                                 <Image

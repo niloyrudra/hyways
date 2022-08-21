@@ -14,19 +14,12 @@ const UserVoiceIcon = ( props ) => {
       setSound(sound);
       await sound.playAsync();
     }
-    console.log("LOADED....")
-  //   props.isScanned ? playSound() : null;
-  // }, [props.isScanned]);
-    playSound();
-  }, []);
-  
+
+      props.status == "run" && playSound();
+  }, [props.status]);
 
   React.useEffect(() => {   
-    return sound
-      ? () => {
-          console.log('Unloading Sound');
-          sound.unloadAsync(); }
-      : undefined;
+    return sound ? () => { sound.unloadAsync(); } : undefined;
   }, [sound]);
 
   return (
