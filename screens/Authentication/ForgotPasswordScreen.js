@@ -31,7 +31,7 @@ const ForgotPasswordScreen = () => {
       <View style={styles.inputView}>
         <Image source={require("../../assets/icons/phone.png")} style={{position:"absolute",left:15,top:11,width:13.33,height:21.33}} />
         <TextInput
-          style={styles.TextInput}
+          style={styles.textInput}
           placeholder="Phone Number"
           placeholderTextColor="#003f5c"
           onChangeText={(number) => setPhoneNumber(number)}
@@ -86,10 +86,11 @@ const styles = StyleSheet.create({
         fontWeight: "900",
         fontSize: 22
     },
-    TextInput: {
-        height: 50,
-        flex: 1,
-        padding: 10,
+    textInput: {
+        height: 45,
+        width: 297,
+        // flex: 1,
+        // padding: 10,
         paddingLeft:25,
         marginLeft: 20,
     },

@@ -80,8 +80,7 @@ const SignInScreen = ( {navigation} ) => {
             style={styles.container}
             behavior={ Platform.OS === "ios" ? 'padding' : 'height' }
         > */}
-        <KeyboardAwareScrollView contentContainerStyle={{flex: 1}} extraScrollHeight={100} enableOnAndroid={true} 
-   keyboardShouldPersistTaps='handled'>
+        <KeyboardAwareScrollView contentContainerStyle={{flex: 1}} extraScrollHeight={100} enableOnAndroid={true} keyboardShouldPersistTaps='handled'>
 
             <View style={styles.container}>
 
@@ -103,7 +102,7 @@ const SignInScreen = ( {navigation} ) => {
                         </View>
                         <View style={styles.inputView}>
                             <TextInput
-                                style={{...styles.TextInput, borderColor: emailErrorMessage ? 'red': "#C4C7C4" }}
+                                style={{...styles.textInput, borderColor: emailErrorMessage ? 'red' : "#C4C7C4" }}
                                 placeholder="Enter Email"
                                 keyboardType="email-address"
                                 placeholderTextColor="#003f5c"
@@ -117,7 +116,7 @@ const SignInScreen = ( {navigation} ) => {
                         </View>
                         <View style={styles.inputView}>
                             <TextInput
-                                style={{...styles.TextInput, borderColor: passwordErrorMessage ? 'red': "#C4C7C4" }}
+                                style={{...styles.textInput, borderColor: passwordErrorMessage ? 'red': "#C4C7C4" }}
                                 placeholder="Enter Password"
                                 placeholderTextColor="#003f5c"
                                 secureTextEntry={true}
@@ -195,17 +194,18 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "#C4C7C4"
     },
+    textInput: {
+        height: 45,
+        width:297,
+        // flex: 1,
+        // paddingHorizontal: 10,
+        marginLeft: 20,
+    },
     inputViewLabel: {
         fontWeight: "900",
         fontSize: 17,
         marginLeft:20,
         marginBottom:5
-    },
-    TextInput: {
-        height: 50,
-        flex: 1,
-        padding: 10,
-        marginLeft: 20,
     },
     infoViewContainer: {
         flexDirection: "row",

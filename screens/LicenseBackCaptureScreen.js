@@ -1,6 +1,9 @@
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { BarCodeScanner } from 'expo-barcode-scanner'
+// import { Camera } from 'expo-camera'
+
+import { useIsFocused } from '@react-navigation/native';
 
 // import UserVoiceIcon from "../components/UserVoiceIcon"
 
@@ -11,7 +14,9 @@ const LicenseBackCaptureScreen = ( { navigation } ) => {
     
     const [ hasPermission, setHasPermission ] = useState(null);
     const [ scanned, setScanned ] = useState(false);
-
+    
+    const isFocused = useIsFocused();
+    
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             setScanned(false)
@@ -22,15 +27,16 @@ const LicenseBackCaptureScreen = ( { navigation } ) => {
 
     useEffect( () => {
         const getBarCodeScannerPermission = async () => {
-        const { status } = await BarCodeScanner.requestPermissionsAsync();
-        setHasPermission( status === 'granted' );
+            const { status } = await BarCodeScanner.requestPermissionsAsync();
+            // const { status } = await Camera.requestCameraPermissionsAsync()
+            setHasPermission( status === 'granted' );
         };
         getBarCodeScannerPermission();
     }, [] );
 
     const handleBarCodeScanned = ( { type, data } ) => {
+        setScanned( true );
         if(data) {
-            setScanned( true );
             console.log( `Bar code with type ${type} and data ${data} has been scanned!` );
         }
     }
@@ -49,7 +55,7 @@ const LicenseBackCaptureScreen = ( { navigation } ) => {
                 <View
                 style={{
                     marginBottom: 30,
-                    width: 273 // 165,
+                    width: 165 // 273 // 165,
                 }}
                 >
                 <Text
@@ -66,63 +72,67 @@ const LicenseBackCaptureScreen = ( { navigation } ) => {
                     style={{
                         flex:1,
                         width: "100%" ,
-                        minHeight: 300,
+                        // minHeight: 300,
+                        maxHeight: 354,
                         backgroundColor:"#222",
                         overflow:"hidden"
                     }}
                 >
+                    {isFocused ? (
+                        <BarCodeScanner
+                            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                            style={{...StyleSheet.absoluteFillObject, top:-180, bottom:-180 }}
+                        />
+                    ) : null}
 
-                    <BarCodeScanner
+                    {/* <Camera
                         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-                        style={{...StyleSheet.absoluteFillObject, top:-180, bottom:-180 }}
-                        // style={styles.scanner}
-                    />
+                        style={{
+                            width: "100%",
+                            height: 354
+                        }}
+                    /> */}
                 </View>
 
                 <View
-                style={{
-                    marginVertical: 30,
-                    // width: 165,
-                }}
-                >
-                <Text
                     style={{
-                    fontSize: 15,
-                    lineHeight: 15,
-                    fontWeight: "800",
-                    textAlign: "center"
+                        marginVertical: 30,
+                        // width: 165,
                     }}
-                >Scanning Will Happen Automatically</Text>
-                </View>
-
-                <View
-                style={{
-                    marginTop:20,
-                    marginBottom:30
-                }}
                 >
-                {/* <UserVoiceIcon /> */}
+                    <Text
+                        style={{
+                        fontSize: 15,
+                        lineHeight: 15,
+                        fontWeight: "800",
+                        textAlign: "center"
+                        }}
+                    >Scanning Will Happen Automatically</Text>
                 </View>
 
                 {/* <View style={{ width:122,height:4,backgroundColor:colors.primaryColor,borderRadius:4, marginVertical:20 }} /> */}
 
                 {scanned &&
                     <>
-                        <Text style={{fontSize:15,color:colors.dark,fontWeight:"800"}}>Successfully completed</Text>
+                        <Text style={{fontSize:20,color:colors.dark,fontWeight:"900", color: colors.primaryColorTrans}}>Successfully completed</Text>
 
                         <TouchableOpacity
                             style={{
                                 marginVertical: 30,
-                                borderWidth: 1,
+                                // borderWidth: 1,
                                 paddingHorizontal: 20,
                                 paddingVertical: 10
                             }}
-                            onPress={() => navigation.navigate("LicenseDetailForm")}
+                            onPress={() => {
+                                setScanned(false);
+                                navigation.navigate("LicenseDetailForm")
+                            }}
                         >
-                            <Text>Proceed</Text>
+                            <Text style={{ color: colors.primaryColor, textDecorationLine: "underline", textDecorationColor: colors.primaryColor, textTransform:"uppercase" }}>Proceed</Text>
                         </TouchableOpacity>
                     </>
                 }
+
             </View>
 
         </ScrollView>
@@ -136,13 +146,16 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: '#fff',
       alignItems: 'center',
-      justifyContent: 'center',
-      padding: 30
+      justifyContent: 'flex-start',
+      paddingTop: 50,
+      paddingHorizontal: 30,
+      minHeight: Dimensions.get( "screen" ).height
     },
-    scanner: {
-      flex:1,
-      width: '100%',
-      maxHeight: 354,
-      backgroundColor: '#99999975'
-    }
+    // scanner: {
+    //   flex:1,
+    //   width: '100%',
+    //   maxHeight: 354,
+    //   backgroundColor: '#99999975',
+    //   overflow: "hidden"
+    // }
 })

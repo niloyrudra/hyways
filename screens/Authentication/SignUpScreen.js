@@ -140,7 +140,7 @@ const SignUpScreen = ({ navigation }) => {
                         </View>
                         <View style={styles.inputView}>
                             <TextInput
-                                style={styles.TextInput}
+                                style={styles.textInput}
                                 disabled={isLoading}
                                 placeholder="Enter Email"
                                 keyboardType="email-address"
@@ -155,7 +155,7 @@ const SignUpScreen = ({ navigation }) => {
                         </View>
                         <View style={styles.inputView}>
                             <TextInput
-                                style={styles.TextInput}
+                                style={styles.textInput}
                                 disabled={isLoading}
                                 placeholder="Enter Password"
                                 placeholderTextColor="#003f5c"
@@ -170,7 +170,7 @@ const SignUpScreen = ({ navigation }) => {
                         </View>
                         <View style={styles.inputView}>
                             <TextInput
-                                style={styles.TextInput}
+                                style={styles.textInput}
                                 disabled={isLoading}
                                 placeholder="Enter Password"
                                 placeholderTextColor="#003f5c"
@@ -297,10 +297,11 @@ const styles = StyleSheet.create({
         marginLeft:20,
         marginBottom:5
     },
-    TextInput: {
-        height: 50,
-        flex: 1,
-        padding: 10,
+    textInput: {
+        height: 45,
+        width:297,
+        // flex: 1,
+        // paddingHorizontal: 10,
         marginLeft: 20,
     },
 

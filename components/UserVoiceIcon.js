@@ -7,15 +7,25 @@ const UserVoiceIcon = ( props ) => {
   const [sound, setSound] = React.useState();
   
   React.useEffect(() => {
-    const playSound = async () => {
+    const soundGen = async () => {
       const { sound } = await Audio.Sound.createAsync(
          require('../assets/sounds/info.wav')
       );
-      setSound(sound);
+      await setSound(sound);
+      return sound;
+    }
+    const playSound = async () => {
+      const sound = await soundGen()
       await sound.playAsync();
     }
+    const stopSound = async () => {
+      const sound = await soundGen()
+      await sound.stopAsync();
+    }
 
-      props.status == "run" && playSound();
+    props.status == "run" && playSound();
+    props.status == "stop" && stopSound();
+
   }, [props.status]);
 
   React.useEffect(() => {   
