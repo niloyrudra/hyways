@@ -1,6 +1,6 @@
 import React from "react";
-import { StyleSheet, Dimensions, SafeAreaView, FlatList, Text, View, TextInput, Button, Alert, TouchableOpacity } from "react-native";
-import { useForm, Controller } from "react-hook-form";
+import { StyleSheet, SafeAreaView, Text, View, ActivityIndicator, TouchableOpacity } from "react-native";
+import { useForm } from "react-hook-form";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 // Components
@@ -8,6 +8,9 @@ import FormTextInput from "../components/FormTextInput";
 
 // Constants
 import colors from "../constants/colors";
+
+// DB
+import { auth, db } from '../config/firebase';
 
 const formValues = [
     { idx:0, label: 'First Name on License', placeholder: 'First Name', name: 'firstName' },
@@ -24,9 +27,16 @@ const formValues = [
     { idx:11, label: 'Expiration Date', placeholder: 'Enter Date', name: 'expirationDate' },
 ];
 
-// const LicenseDetailFormScreen = ( { navigation, props, setData = ()=>{} } ) => {
-const LicenseDetailFormScreen = ( { navigation, route} ) => {
-    const { control, handleSubmit, formState: { errors } } = useForm({
+const LicenseDetailFormScreen = ( { navigation, route } ) => {
+
+    // console.log(userId)
+    const [ userId, setUserId ] = React.useState( auth.currentUser.uid )
+    const [ isFormSubmitting, setIsFormSubmitting ] = React.useState( false )
+
+    const [ frontFaceData, setFrontFaceData ] = React.useState( route.params.frontFaceData );
+    const [ backFaceData, setBackFaceData ] = React.useState( route.params.backFaceData );
+
+    const { control, handleSubmit, reset, formState: { errors } } = useForm({
         defaultValues: {
             firstName: '',
             middleName: '',
@@ -45,9 +55,17 @@ const LicenseDetailFormScreen = ( { navigation, route} ) => {
 
     // Handlers
     const onSubmit = data => {
-        console.log(data)
-        // setData(data)
-        if( data?.firstName != "" ) navigation.navigate("Status") 
+        setIsFormSubmitting( true )
+        const formData = { ...data, frontFaceData, backFaceData }
+
+        db.collection("licenses").doc( userId ).set({ formData })
+            .then( () => {
+                reset();
+                setIsFormSubmitting( false );
+
+                navigation.navigate("Status", formData )
+            } )
+            .catch( err => console.error( err ) );
     };
     
     return (
@@ -67,10 +85,28 @@ const LicenseDetailFormScreen = ( { navigation, route} ) => {
         >
             <TouchableOpacity
                 style={styles.submitBtn}
+                disabled={isFormSubmitting}
                 onPress={handleSubmit(onSubmit)}
             >
                 <Text style={styles.submitText}>Add License</Text>
             </TouchableOpacity>
+
+            {
+                isFormSubmitting && (
+                    <View
+                        style={{
+                            flex:1,
+                            // width:50,
+                            height:100,
+                            marginTop: 30,
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }}
+                    >
+                        <ActivityIndicator color={ colors.primaryColor } size="large" />
+                    </View>
+                )
+            }
 
         </View>
         

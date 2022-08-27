@@ -5,6 +5,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner'
 
 import { useIsFocused } from '@react-navigation/native';
 
+// import { auth, db } from '../config/firebase';
 
 // Components
 import UserVoiceIcon from "../components/UserVoiceIcon"
@@ -12,7 +13,10 @@ import UserVoiceIcon from "../components/UserVoiceIcon"
 // Constants
 import colors from "../constants/colors"
 
-const LicenseFrontCaptureScreen = ( { navigation } ) => {
+const LicenseFrontCaptureScreen = ( { navigation, route } ) => {
+    
+    // console.log(auth, db)
+    // const [ existingUser, setExistingUser ] = useState(route.params?.user);
     
     const [ hasPermission, setHasPermission ] = useState(null);
     const [ scanned, setScanned ] = useState(false);
@@ -54,9 +58,11 @@ const LicenseFrontCaptureScreen = ( { navigation } ) => {
         };
     }, [navigation]);
 
+    React.useEffect(() => {
+        if( scannedData ) navigation.navigate( "LicenseBackVerifier", { frontFaceData: scannedData } )
+    }, [scannedData])
 
     const handleBarCodeScanned = ( { type, data } ) => {
-        console.log( type, data, "__RUNNING_SCANNING__" )
         setScanned( true );
         if(data) {
             console.log( `Bar code with type ${type} and data ${data} has been scanned!` );
@@ -70,6 +76,8 @@ const LicenseFrontCaptureScreen = ( { navigation } ) => {
     if (hasPermission === false) {
         return (<View style={styles.container}><Text>No access to camera</Text></View>);
     }
+
+    // console.log(">> add >>", existingUser)
 
     return (
         <ScrollView>
@@ -128,7 +136,7 @@ const LicenseFrontCaptureScreen = ( { navigation } ) => {
                     <>
                         <Text style={{fontSize:20,color:colors.dark,fontWeight:"900", color: colors.primaryColorTrans}}>Successfully completed</Text>
 
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             style={{
                                 marginVertical: 30,
                                 // borderWidth: 1,
@@ -141,7 +149,7 @@ const LicenseFrontCaptureScreen = ( { navigation } ) => {
                             }}
                         >
                             <Text style={{ color: colors.primaryColor, textDecorationLine: "underline", textDecorationColor: colors.primaryColor, textTransform:"uppercase" }}>Proceed</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </>
                     :
                     <View

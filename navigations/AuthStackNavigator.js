@@ -7,6 +7,9 @@ import SignUpScreen from "../screens/Authentication/SignUpScreen";
 import ForgotPasswordScreen from "../screens/Authentication/ForgotPasswordScreen"
 import OTPScreen from "../screens/Authentication/OTPScreen"
 
+// Constants
+import colors from '../constants/colors';
+
 const AuthStack = createNativeStackNavigator();
 
 const AuthStackNavigator = () => {
@@ -14,14 +17,14 @@ const AuthStackNavigator = () => {
     <AuthStack.Navigator
         initialRouteName='SignIn'
         screenOptions={{
-            headerTintColor: "#ffffff",
+            headerTintColor: colors.colorWhite,
             headerTitleAlign: "center",
             headerTitleStyle: {
                 fontSize: 15,
                 fontWeight: "800"
             },
             headerStyle: {
-                backgroundColor: '#00B906'
+                backgroundColor: colors.primaryColor
             },
             headerBackTitleVisible: true
         }}

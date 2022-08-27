@@ -8,7 +8,12 @@ import WelcomeText from "../components/WelcomeText";
 // import { auth, db } from '../config/firebase';
 import colors from '../constants/colors';
 
-const HomeScreen = ( {navigation} ) => {
+const HomeScreen = ( {navigation, route } ) => {
+
+  const [ loggedUserId, setLoggedUserId ] = React.useState( route.params?.userId )
+
+  // console.log(auth)
+  // console.log(route.params)
 
   // const handleSignOut = async () => {
   //   try {
@@ -82,7 +87,7 @@ const HomeScreen = ( {navigation} ) => {
           }}
 
           onPress={() => {
-            navigation.navigate("BottomTabs")
+            navigation.navigate("BottomTabs", { userId: loggedUserId })
           }}
         >
           <Text style={{fontSize:24,fontWeight:"bold",color:colors.colorWhite}}>Click Here</Text>

@@ -5,26 +5,18 @@ import { BarCodeScanner } from 'expo-barcode-scanner'
 
 import { useIsFocused } from '@react-navigation/native';
 
-// import UserVoiceIcon from "../components/UserVoiceIcon"
-
 import colors from "../constants/colors"
 
 
-const LicenseBackCaptureScreen = ( { navigation } ) => {
+const LicenseBackCaptureScreen = ( { navigation, route } ) => {
     
     const [ hasPermission, setHasPermission ] = useState(null);
     const [ scanned, setScanned ] = useState(false);
+    const [ frontFaceData, setFrontFaceData ] = useState( route.params.frontFaceData );
+    const [ backFaceData, setBackFaceData ] = useState( null );
     
     const isFocused = useIsFocused();
     
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            setScanned(false)
-        });
-    
-        return unsubscribe;
-    }, [navigation]);
-
     useEffect( () => {
         const getBarCodeScannerPermission = async () => {
             const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -34,10 +26,25 @@ const LicenseBackCaptureScreen = ( { navigation } ) => {
         getBarCodeScannerPermission();
     }, [] );
 
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            setScanned(false)
+        });
+    
+        return unsubscribe;
+    }, [navigation]);
+
+    useEffect(() => {
+        if( backFaceData ) navigation.navigate( "LicenseDetailForm", { backFaceData: backFaceData, frontFaceData: frontFaceData } );
+    }, [backFaceData])
+    
+    console.log(frontFaceData);
+
     const handleBarCodeScanned = ( { type, data } ) => {
         setScanned( true );
         if(data) {
             console.log( `Bar code with type ${type} and data ${data} has been scanned!` );
+            setBackFaceData(data)
         }
     }
 
@@ -47,6 +54,8 @@ const LicenseBackCaptureScreen = ( { navigation } ) => {
     if (hasPermission === false) {
         return (<Text>No access to camera</Text>);
     }
+
+    
 
     return (
         <ScrollView>
@@ -116,7 +125,7 @@ const LicenseBackCaptureScreen = ( { navigation } ) => {
                     <>
                         <Text style={{fontSize:20,color:colors.dark,fontWeight:"900", color: colors.primaryColorTrans}}>Successfully completed</Text>
 
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             style={{
                                 marginVertical: 30,
                                 // borderWidth: 1,
@@ -129,7 +138,7 @@ const LicenseBackCaptureScreen = ( { navigation } ) => {
                             }}
                         >
                             <Text style={{ color: colors.primaryColor, textDecorationLine: "underline", textDecorationColor: colors.primaryColor, textTransform:"uppercase" }}>Proceed</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </>
                 }
 

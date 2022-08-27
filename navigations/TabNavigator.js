@@ -4,7 +4,7 @@ import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 // Screens
-import AddLicenseScreen from "../screens/AddLicenseScreen"
+// import AddLicenseScreen from "../screens/AddLicenseScreen"
 import AddLicenseFrontScreen from "../screens/AddLicenseFrontScreen"
 import AddLicenseBackScreen from "../screens/AddLicenseBackScreen"
 import LicenseListScreen from "../screens/LicenseListScreen"
@@ -29,30 +29,7 @@ import BackButtonIcon from '../components/BackButtonIcon'
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
-
-  // const getTitle = ( {name} ) => {
-
-  //   switch( name ) {
-  //     case "CardList":
-  //       name = "Home"
-  //       break;
-  //     case "LicenseDisplay":
-  //       name = "Valid"
-  //       break;
-  //     case "ScannerDetail":
-  //       name = "Verify Another License"
-  //       break;
-  //     case "Scanner":
-  //       name = "Verify Another License"
-  //       break;
-  //     case "Status":
-  //       name = "Verify Another License"
-  //       break;
-  //   }
-
-  //   return name ? name : "";
-  // };
-
+  
   return (
     <Tab.Navigator
       screenOptions={({route, navigation}) => ({
@@ -68,7 +45,6 @@ const TabNavigator = () => {
           width: '65%',
           backgroundColor: colors.primaryColorTrans,
         },
-        // headerTitle: getTitle(route),
         headerStyle: {
           backgroundColor: colors.primaryColor,
           height:80
@@ -208,23 +184,6 @@ const TabNavigator = () => {
           },
         }}
       />
-      {/* <Tab.Screen name="Status" component={AddLicenseScreen} options={{
-          tabBarLabel: "Status",
-          headerTitle:"Verify Another License",
-          tabBarIcon: ( { focused } ) => ( <StatusTabIcon color={ focused ? colors.primaryColor : colors.inActiveColor } opacityVal={ focused ? 1 : 0.5 } /> ),
-          tabBarActiveTintColor: colors.primaryColor,
-          tabBarInactiveTintColor: colors.colorWhite,
-          tabBarIconStyle:{
-            marginBottom:10
-          },
-          tabBarItemStyle:{
-            paddingVertical:10
-          },
-          tabBarLabelStyle: {
-            fontWeight: "800"
-          },
-        }}
-      /> */}
 
       <Tab.Screen name="LicenseDisplay" component={LicenseDisplayScreen} options={{
           headerTitle:"Valid",

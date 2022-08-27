@@ -7,7 +7,10 @@ import DefaultUserAvatar from '../components/DefaultUserAvatar'
 import CircleAround from '../components/CircleAround'
 import TabScreenHeading from '../components/TabScreenHeading'
 
-const StatusScreen = () => {
+const StatusScreen = ( { route } ) => {
+
+  const [ data, setData ] = React.useState( route.params )
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -45,7 +48,7 @@ const StatusScreen = () => {
         <View style={{
           marginVertical: 5
         }}>
-          <Text style={styles.subHeading}>April 21, 2022</Text>
+          <Text style={styles.subHeading}>{data?.year ? data?.year : "---" }</Text>
         </View>
         <View style={{
           marginVertical: 5
@@ -56,7 +59,7 @@ const StatusScreen = () => {
         <View style={{
           marginVertical: 5
         }}>
-          <Text style={styles.subHeading}>April 21, 2023</Text>
+          <Text style={styles.subHeading}>{data?.expirationDate ? data?.expirationDate : "---" }</Text>
         </View>
 
       </View>

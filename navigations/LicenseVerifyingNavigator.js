@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
 
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+// import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createStackNavigator } from '@react-navigation/stack'
 
 // Screens
@@ -54,7 +54,7 @@ const LicenseVerifyingNavigator = () => {
                 fontWeight: 'bold',
             },
             headerLeft:() => {
-                if( route.name == "Status" || route.name == "LicenseFrontVerifier" ) return (<View style={{flex:1}} />);
+                if( route.name == "Status" || route.name == "LicenseFrontVerifier" ) return (<View style={{ flex:1 }} />);
 
                 return (
                     

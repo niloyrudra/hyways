@@ -6,13 +6,11 @@ import { createDrawerNavigator, DrawerItemList, DrawerItem } from '@react-naviga
 // Screens
 import HomeScreen from '../screens/HomeScreen';
 import CardListScreen from '../screens/LicenseListScreen';
-// import AddLicenseScreen from '../screens/AddLicenseScreen';
 import CarDetailScreen from "../screens/CarDetailScreen"
 import TabNavigator from './TabNavigator';
 
 // Components
 import MenuIcon from '../components/MenuIcon';
-import CameraIcon from '../components/CameraIcon';
 
 // Constants
 import colors from "../constants/colors"
@@ -20,7 +18,6 @@ import colors from "../constants/colors"
 const Drawer = createDrawerNavigator()
 
 const DrawerNavigator = () => {
-
   return (
     <Drawer.Navigator
       drawerContent={ props => <DrawerContent { ...props } /> }
@@ -79,40 +76,19 @@ const DrawerNavigator = () => {
       <Drawer.Screen name="LicenseList" component={CardListScreen}
         options={{title:"License List"}}
       />
-      {/* <Drawer.Screen name="AddLicense" component={AddLicenseScreen}
-        options={{
-          title:"Add License",
-          headerLeft:() => {},
-          headerRight: () => (
-            <TouchableOpacity
-              style={{
-                marginRight: 36
-              }}
-              onPress={() => console.log("Camera")}
-            >
-              <CameraIcon/>
-            </TouchableOpacity>
-          )
-        }}
-      /> */}
 
-      <Drawer.Screen name="BottomTabs" component={TabNavigator} options={{headerShown:false}} />
+      <Drawer.Screen name="BottomTabs" component={TabNavigator} options={{ headerShown:false }} />
       
       <Drawer.Screen name="CarDetail" component={CarDetailScreen} options={{
         title:"Card Detail"
       }} />
 
-      {/* <Drawer.Screen name="LicenseDisplay" component={LicenseDisplayScreen} options={{
-        title: "Valid",
-        headerLeft:() => {},
-        headerRight:() => {},
-      }} /> */}
-
     </Drawer.Navigator>
   )
 }
 
-const DrawerContent = ( { navigation, route } ) => {
+const DrawerContent = ( { navigation } ) => {
+
   const [ isEnabled, setIsEnabled ] = React.useState(false)
   const [ isSearchTerm, setIsSearchTerm ] = React.useState('')
 
@@ -148,13 +124,13 @@ const DrawerContent = ( { navigation, route } ) => {
 
         </View>
 
-        <CustomDrawerItem label="Sync with a telematic" onPress={() => navigation.navigate("Home")} />
+        <CustomDrawerItem label="Sync with a telematic" onPress={() => navigation.navigate( "Home" )} />
 
         <CustomDrawerItem label="Add More Vehicle" onPress={() => navigation.navigate( "LicenseFrontVerifier" )} />
 
-        <CustomDrawerItem label="Track Your Car" onPress={() => navigation.navigate("CarDetail")} />
+        <CustomDrawerItem label="Track Your Car" onPress={() => navigation.navigate( "CarDetail" )} />
 
-        <CustomDrawerItem label="Disconnect Telematic" onPress={() => navigation.navigate("Home")} />
+        <CustomDrawerItem label="Disconnect Telematic" onPress={() => navigation.navigate( "Home" )} />
 
         {/* <DrawerItem
           label="Home"
