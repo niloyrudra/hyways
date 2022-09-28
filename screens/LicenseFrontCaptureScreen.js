@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, TouchableOpacity, Dimensions, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { BarCodeScanner } from 'expo-barcode-scanner'
-// import { Camera } from 'expo-camera'
+import { Camera, CameraType } from 'expo-camera'
 
 import { useIsFocused } from '@react-navigation/native';
 
@@ -14,14 +14,15 @@ import UserVoiceIcon from "../components/UserVoiceIcon"
 import colors from "../constants/colors"
 
 const LicenseFrontCaptureScreen = ( { navigation, route } ) => {
-    
-    // console.log(auth, db)
-    // const [ existingUser, setExistingUser ] = useState(route.params?.user);
-    
+        
     const [ hasPermission, setHasPermission ] = useState(null);
     const [ scanned, setScanned ] = useState(false);
     const [ scannedData, setScannedData ] = useState(null);
     const [ audioStatus, setAudioStatus ] = useState("run");
+
+    const [type, setType] = useState(CameraType.back);
+    const [permission, requestPermission] = Camera.useCameraPermissions();
+    const [cameraRef, setCameraRef] = useState(null)
 
     const isFocused = useIsFocused();
 
@@ -36,11 +37,19 @@ const LicenseFrontCaptureScreen = ( { navigation, route } ) => {
 
     useEffect( () => {
         const getBarCodeScannerPermission = async () => {
-            const { status } = await BarCodeScanner.requestPermissionsAsync();
+            // const { status } = await BarCodeScanner.requestPermissionsAsync();
             
-            // const { status } = await Camera.requestCameraPermissionsAsync()
+            const { status } = await Camera.requestCameraPermissionsAsync()
 
             setHasPermission( status === 'granted' );
+
+            // if (!permission) return 
+            // if (!permission.granted) {
+            //     alert( "Permission is not granted!" )
+            //     return;
+            // }
+
+            // setHasPermission( permission.granted )
         };
         getBarCodeScannerPermission();
     }, [] );
@@ -59,16 +68,17 @@ const LicenseFrontCaptureScreen = ( { navigation, route } ) => {
     }, [navigation]);
 
     React.useEffect(() => {
+        console.log("GET THE DATA>>>")
         if( scannedData ) navigation.navigate( "LicenseBackVerifier", { frontFaceData: scannedData } )
     }, [scannedData])
 
-    const handleBarCodeScanned = ( { type, data } ) => {
-        setScanned( true );
-        if(data) {
-            console.log( `Bar code with type ${type} and data ${data} has been scanned!` );
-            setScannedData(data)
-        }
-    }
+    // const handleBarCodeScanned = ( { type, data } ) => {
+    //     setScanned( true );
+    //     if(data) {
+    //         console.log( `Bar code with type ${type} and data ${data} has been scanned!` );
+    //         setScannedData(data)
+    //     }
+    // }
 
     if (hasPermission === null) {
         return (<View style={styles.container}><Text>Requesting for camera permission</Text></View>);
@@ -76,8 +86,6 @@ const LicenseFrontCaptureScreen = ( { navigation, route } ) => {
     if (hasPermission === false) {
         return (<View style={styles.container}><Text>No access to camera</Text></View>);
     }
-
-    // console.log(">> add >>", existingUser)
 
     return (
         <ScrollView>
@@ -102,6 +110,7 @@ const LicenseFrontCaptureScreen = ( { navigation, route } ) => {
                     style={{
                         flex:1,
                         width: "100%" ,
+                        // width: "auto" ,
                         // minHeight: 300,
                         maxHeight: 354,
                         backgroundColor:"#222",
@@ -109,11 +118,71 @@ const LicenseFrontCaptureScreen = ( { navigation, route } ) => {
                     }}
                 >
                     {isFocused ? (
-                        <BarCodeScanner
+                        <Camera style={{ flex: 1 }} type={type} ref={ref => {
+                            setCameraRef(ref) ;
+                        }}>
+                            <View
+                            style={{
+                                flex: 1,
+                                backgroundColor: 'transparent',
+                                justifyContent: 'flex-end'
+                            }}>
+                                <TouchableOpacity
+                                    style={{
+                                    flex: 0.1,
+                                    alignSelf: 'flex-end'
+                                    }}
+                                    onPress={() => {
+                                    setType(
+                                        type === Camera.Constants.Type.back
+                                        ? Camera.Constants.Type.front
+                                        : Camera.Constants.Type.back
+                                    );
+                                    }}>
+                                    <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Flip </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={{alignSelf: 'center'}} onPress={async() => {
+                                    if(cameraRef){
+                                        let photo = await cameraRef.takePictureAsync( { base64:true, quality:0 } );
+                                        // console.log('photo', photo);
+                                        setScanned( true );
+                                        if(photo?.base64) {
+                                            // console.log( `Bar code with type ${type} and photo?.url ${photo?.url} has been scanned!` );
+                                            setScannedData(photo?.base64)
+
+                                            // console.log( photo )
+
+                                            // navigation.navigate( "LicenseBackVerifier", { frontFaceData: scannedData } )
+                                        }
+                                    }
+                                }}>
+                                    <View style={{ 
+                                    borderWidth: 2,
+                                    borderRadius:50,
+                                    borderColor: 'white',
+                                    height: 50,
+                                    width:50,
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center'}}
+                                    >
+                                    <View style={{
+                                        borderWidth: 2,
+                                        borderRadius:50,
+                                        borderColor: 'white',
+                                        height: 40,
+                                        width:40,
+                                        backgroundColor: 'white'}} >
+                                    </View>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        </Camera>
+                    ) : null}
+                        {/* <BarCodeScanner
                             onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
                             style={{...StyleSheet.absoluteFillObject, top:-180, bottom:-180 }}
-                        />
-                    ) : null}
+                        /> */}
                 </View>
 
                 <View

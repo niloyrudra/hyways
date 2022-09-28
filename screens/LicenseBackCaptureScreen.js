@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, TouchableOpacity, Dimensions, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { BarCodeScanner } from 'expo-barcode-scanner'
-// import { Camera } from 'expo-camera'
+// import { BarCodeScanner } from 'expo-barcode-scanner'
+import { Camera,CameraType } from 'expo-camera'
 
 import { useIsFocused } from '@react-navigation/native';
 
@@ -14,13 +14,16 @@ const LicenseBackCaptureScreen = ( { navigation, route } ) => {
     const [ scanned, setScanned ] = useState(false);
     const [ frontFaceData, setFrontFaceData ] = useState( route.params.frontFaceData );
     const [ backFaceData, setBackFaceData ] = useState( null );
-    
+    const [type, setType] = useState(CameraType.back);
+    const [permission, requestPermission] = Camera.useCameraPermissions();
+    const [cameraRef, setCameraRef] = useState(null)
+
     const isFocused = useIsFocused();
     
     useEffect( () => {
         const getBarCodeScannerPermission = async () => {
-            const { status } = await BarCodeScanner.requestPermissionsAsync();
-            // const { status } = await Camera.requestCameraPermissionsAsync()
+            // const { status } = await BarCodeScanner.requestPermissionsAsync();
+            const { status } = await Camera.requestCameraPermissionsAsync()
             setHasPermission( status === 'granted' );
         };
         getBarCodeScannerPermission();
@@ -38,15 +41,13 @@ const LicenseBackCaptureScreen = ( { navigation, route } ) => {
         if( backFaceData ) navigation.navigate( "LicenseDetailForm", { backFaceData: backFaceData, frontFaceData: frontFaceData } );
     }, [backFaceData])
     
-    console.log(frontFaceData);
-
-    const handleBarCodeScanned = ( { type, data } ) => {
-        setScanned( true );
-        if(data) {
-            console.log( `Bar code with type ${type} and data ${data} has been scanned!` );
-            setBackFaceData(data)
-        }
-    }
+    // const handleBarCodeScanned = ( { type, data } ) => {
+    //     setScanned( true );
+    //     if(data) {
+    //         console.log( `Bar code with type ${type} and data ${data} has been scanned!` );
+    //         setBackFaceData(data)
+    //     }
+    // }
 
     if (hasPermission === null) {
         return (<Text>Requesting for camera permission</Text>);
@@ -88,11 +89,67 @@ const LicenseBackCaptureScreen = ( { navigation, route } ) => {
                     }}
                 >
                     {isFocused ? (
-                        <BarCodeScanner
-                            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-                            style={{...StyleSheet.absoluteFillObject, top:-180, bottom:-180 }}
-                        />
+                        <Camera style={{ flex: 1 }} type={type} ref={ref => {
+                            setCameraRef(ref) ;
+                        }}>
+                            <View
+                            style={{
+                                flex: 1,
+                                backgroundColor: 'transparent',
+                                justifyContent: 'flex-end'
+                            }}>
+                                <TouchableOpacity
+                                    style={{
+                                    flex: 0.1,
+                                    alignSelf: 'flex-end'
+                                    }}
+                                    onPress={() => {
+                                    setType(
+                                        type === Camera.Constants.Type.back
+                                        ? Camera.Constants.Type.front
+                                        : Camera.Constants.Type.back
+                                    );
+                                    }}>
+                                    <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Flip </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={{alignSelf: 'center'}} onPress={async() => {
+                                    if(cameraRef){
+                                        let photo = await cameraRef.takePictureAsync( { base64:true, quality:0 } );
+
+                                        setScanned( true );
+                                        if(photo?.base64) {
+                                            // console.log( `Bar code with type ${type} and photo?.base64 ${photo?.base64} has been scanned!` );
+                                            setBackFaceData(photo?.base64)
+                                        }
+                                    }
+                                }}>
+                                    <View style={{ 
+                                    borderWidth: 2,
+                                    borderRadius:50,
+                                    borderColor: 'white',
+                                    height: 50,
+                                    width:50,
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center'}}
+                                    >
+                                    <View style={{
+                                        borderWidth: 2,
+                                        borderRadius:50,
+                                        borderColor: 'white',
+                                        height: 40,
+                                        width:40,
+                                        backgroundColor: 'white'}} >
+                                    </View>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        </Camera>
                     ) : null}
+                    {/* <BarCodeScanner
+                        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                        style={{...StyleSheet.absoluteFillObject, top:-180, bottom:-180 }}
+                    /> */}
 
                     {/* <Camera
                         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}

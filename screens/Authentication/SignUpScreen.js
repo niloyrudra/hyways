@@ -13,9 +13,18 @@ import {
   ActivityIndicator
 } from "react-native";
 // import { Alert } from "react-native-web";
-import KeyboardAvoidingView from "react-native/Libraries/Components/Keyboard/KeyboardAvoidingView";
+// import KeyboardAvoidingView from "react-native/Libraries/Components/Keyboard/KeyboardAvoidingView";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
+import Constants from "expo-constants";
+
+// import * as Google from 'expo-google-app-auth';
+import * as Google from "expo-auth-session/providers/google"
+// import * as Facebook from "expo-auth-session/providers/facebook"
+import * as WebBrowser from "expo-web-browser"
+
+import * as Facebook from 'expo-facebook';
 
 import colors from "../../constants/colors";
 
@@ -24,7 +33,22 @@ import ErrorMessage from "../../components/ErrorMessage";
 // FireBase
 import { auth } from "../../config/firebase";
 
+WebBrowser.maybeCompleteAuthSession();
+
 const SignUpScreen = ({ navigation }) => {
+
+    const [ accessToken, setAccessToken ] = React.useState('');
+    const [ userInfo, setUserInfo ] = React.useState();
+
+    const [ request, response, promptAsync ] = Google.useAuthRequest({
+        androidClientId: Constants.manifest.extra.androidClientId,
+        iosClientId: Constants.manifest.extra.iosClientId,
+        // expoClientId: "926363447781-fq2o3f80bpk00c9ns1shd9is7vio9llc.apps.googleusercontent.com",
+        expoClientId: Constants.manifest.extra.expoClientId,
+        scopes: ['profile', 'email'],
+        // clientId
+    });
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -52,6 +76,9 @@ const SignUpScreen = ({ navigation }) => {
             setPassword('')
             setConfirmPassword('')
         }
+
+        // Google.
+
     };
 
     // const registerHandler_ = () => {
@@ -109,6 +136,68 @@ const SignUpScreen = ({ navigation }) => {
     //     //     } )
     //     //     .catch( error => setErrorMessage( error.message  ) );
     // };
+    React.useEffect(() => {
+        console.log( "response>> ", response)
+        if( response?.type == "success" ) {
+            setAccessToken( response.authentication.accessToken )
+        }
+        return () => {
+            setAccessToken('')
+        }
+    }, [response])
+
+    const getUserData = () => {
+        // console.log(accessToken)
+        // let userInfoResponse; 
+        fetch( "https://www.googleapis.com/userinfo/v2/me", {
+            headers: { Authorization: `Bearer ${accessToken}` }
+        } )
+        .then( res => res.json() )
+        .then( data => {
+            console.log(data)
+            if(data) setUserInfo(data)
+        })
+        .catch( err => console.error( err ) );
+
+    }
+    // const getUserData = async () => {
+    //     let userInfoResponse = await fetch( "https://www.googleapis.com/userinfo/v2/me", {
+    //         headers: {
+    //             Athorization: `Bearer ${accessToken}`
+    //         }
+    //     } );
+
+    //     console.log(userInfoResponfirebasese)
+    // }
+
+    const fbHandleAuth = async () => {
+        try {
+            const fbAppId = Constants.manifest.extra.fbAppId;
+            const fbAppSecret = Constants.manifest.extra.fbAppSecret;
+
+            await Facebook.initializeAsync( fbAppId ); // enter your Facebook App Id
+
+            const { type, token } = await Facebook.logInWithReadPermissionsAsync({
+              permissions: ['public_profile', 'email'],
+            });
+
+            if (type === 'success') {
+              // SENDING THE TOKEN TO FIREBASE TO HANDLE AUTH
+              const credential = auth.FacebookAuthProvider.credential(token);
+              auth.signInWithCredential(credential)
+                .then(user => { // All the details about user are in here returned from firebase
+                  console.log('Logged in successfully', user)
+                })
+                .catch((error) => {
+                  console.log('Error occurred ', error)
+                });
+            } else {
+              // type === 'cancel'
+            }
+        } catch ({ message }) {
+            alert(`Facebook Login Error: ${message}`);
+        }
+    }
 
   return (
     <SafeAreaView style={{ flex: 1 }} mode="margin" edges={['right', 'bottom', 'left']} >
@@ -120,10 +209,6 @@ const SignUpScreen = ({ navigation }) => {
    keyboardShouldPersistTaps='handled'>
 
             <View style={styles.container}>
-    {/* // <KeyboardAvoidingView
-    //     behavior={ Platform.OS === "ios" ? 'padding' : 'height' }
-    //     style={styles.container}
-    // > */}
 
                 <View style={{ marginTop: 40, marginBottom:30 }}>
                     <Image style={styles.image} source={require("../../assets/logo/logo.png")} />
@@ -222,7 +307,10 @@ const SignUpScreen = ({ navigation }) => {
                     <View style={{marginBottom:20,flexDirection:"row",alignItems:"center",justifyContent:"center"}}>
                         <TouchableOpacity
                             style={{marginHorizontal:10}}
-                            onPress={() => console.log("GOOGLE Screen")}
+                            onPress={ accessToken ? getUserData : () => { promptAsync({
+                                showInRecents: true,
+                                useProxy: true
+                            }) } }
                         >
                             <Image  style={{width: 34, height:34}} source={require( "../../assets/social-icons/google.png" )} />
                         </TouchableOpacity>
@@ -236,7 +324,7 @@ const SignUpScreen = ({ navigation }) => {
 
                         <TouchableOpacity
                             style={{marginHorizontal:10}}
-                            onPress={() => console.log("FACEBOOK SignUp")}
+                            onPress={() => fbHandleAuth()}
                         >
                             <Image  style={{width: 34, height:34}} source={require( "../../assets/social-icons/facebook.png" )} />
                         </TouchableOpacity>
