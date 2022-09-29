@@ -31,7 +31,7 @@ import colors from "../../constants/colors";
 import ErrorMessage from "../../components/ErrorMessage";
 
 // FireBase
-import { auth } from "../../config/firebase";
+import { auth, firebase } from "../../config/firebase";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -40,7 +40,9 @@ const SignUpScreen = ({ navigation }) => {
     const [ accessToken, setAccessToken ] = React.useState('');
     const [ userInfo, setUserInfo ] = React.useState();
 
-    const [ request, response, promptAsync ] = Google.useAuthRequest({
+    // Google.useIdTokenAuthRequest
+
+    const [ request, response, promptAsync ] = Google.useIdTokenAuthRequest({
         androidClientId: Constants.manifest.extra.androidClientId,
         iosClientId: Constants.manifest.extra.iosClientId,
         // expoClientId: "926363447781-fq2o3f80bpk00c9ns1shd9is7vio9llc.apps.googleusercontent.com",
@@ -76,106 +78,73 @@ const SignUpScreen = ({ navigation }) => {
             setPassword('')
             setConfirmPassword('')
         }
-
-        // Google.
-
     };
 
-    // const registerHandler_ = () => {
-    //     if( email == '' && password == '' ) {
-    //         Alert.alert( 'Enter your details to create an account!' );
-    //     }
-
-    //     console.log(confirmPassword,password)
-
-    //     if( password !== '' && confirmPassword != password ) {
-    //         setConfirmPassword('')
-    //         Alert.alert( 'Your passwords are not matching each other! Please try again.' );
-    //     }
-    //     else {
-    //         setIsLoading( true );
-
-    //         // firebase
-    //         //     .auth()
-    //         auth.createUserWithEmailAndPassword( email, password )
-    //             .then( (res) => {
-    //                 res.user.updateProfile({
-    //                     // displayName: this.state.displayName
-    //                 })
-    //                 console.log('User registered successfully!')
-    //                 setIsLoading( false )
-    //                 setEmail('')
-    //                 setPassword('')
-    //                 setConfirmPassword('')
-                      
-    //                 // Rediect to Sign In Screen
-    //                 navigation.navigate('SignIn')
-    //             } )
-    //             .catch( error => setErrorMessage( error.message  ) )
-    //     }
-    // };
-
-    // const handleSignUp = () => {
-    //     // app
-    //         // .auth()
-    //     // auth.createUserWithEmailAndPassword( email, password )
-    //     //     .then( ( userCredemtials ) => {
-    //     //         // res.user.updateProfile({
-    //     //         //     // displayName: this.state.displayName
-    //     //         // })
-    //     //         const user = userCredemtials
-    //     //         console.log('User registered successfully!', user)
-    //     //         setSuccessMessage('You are registered successfully!')
-    //     //         setIsLoading( false )
-    //     //         setEmail('')
-    //     //         setPassword('')
-    //     //         setConfirmPassword('')
-                    
-    //     //         // Rediect to Sign In Screen
-    //     //         navigation.navigate('SignIn')
-    //     //     } )
-    //     //     .catch( error => setErrorMessage( error.message  ) );
-    // };
     React.useEffect(() => {
         console.log( "response>> ", response)
         if( response?.type == "success" ) {
-            setAccessToken( response.authentication.accessToken )
+            // const token = response.authentication.accessToken
+            const token = response.params.id_token
+            setAccessToken( token );
+            const credential = firebase.auth.GoogleAuthProvider.credential( token )
+            // console.log("Credentials >> ", credential)
+            auth.signInWithCredential(credential)
+                .then(user => { // All the details about user are in here returned from firebase
+                    console.log('Logged in successful', user)
+                })
+                .catch((error) => {
+                    console.log('Error occurred ', error)
+                });
+
+            // fetch( "https://www.googleapis.com/userinfo/v2/me", {
+            //     headers: { Authorization: `Bearer ${token}` }
+            // } )
+            // .then( res => res.json() )
+            // .then( data => {
+            //     console.log(data)
+            //     if(data) {
+            //         setUserInfo(data)
+            //     }
+            // })
+            // .catch( err => console.error( err ) );
         }
         return () => {
             setAccessToken('')
         }
     }, [response])
 
-    const getUserData = () => {
-        // console.log(accessToken)
-        // let userInfoResponse; 
-        fetch( "https://www.googleapis.com/userinfo/v2/me", {
-            headers: { Authorization: `Bearer ${accessToken}` }
-        } )
-        .then( res => res.json() )
-        .then( data => {
-            console.log(data)
-            if(data) setUserInfo(data)
-        })
-        .catch( err => console.error( err ) );
-
-    }
-    // const getUserData = async () => {
-    //     let userInfoResponse = await fetch( "https://www.googleapis.com/userinfo/v2/me", {
-    //         headers: {
-    //             Athorization: `Bearer ${accessToken}`
+    // const getUserData = () => {
+    //     // console.log(accessToken)
+    //     // let userInfoResponse; 
+    //     fetch( "https://www.googleapis.com/userinfo/v2/me", {
+    //         headers: { Authorization: `Bearer ${accessToken}` }
+    //     } )
+    //     .then( res => res.json() )
+    //     .then( data => {
+    //         console.log(data)
+    //         if(data) {
+    //             setUserInfo(data)
+    //             const credential = firebase.auth.GoogleAuthProvider.credential( data.authentication.accessToken )
+    //             auth.signInWithCredential(credential)
+    //             .then(user => { // All the details about user are in here returned from firebase
+    //               console.log('Logged in successful', user)
+    //             })
+    //             .catch((error) => {
+    //               console.log('Error occurred ', error)
+    //             });
     //         }
-    //     } );
+    //     })
+    //     .catch( err => console.error( err ) );
 
-    //     console.log(userInfoResponfirebasese)
     // }
 
     const fbHandleAuth = async () => {
         try {
-            const fbAppId = Constants.manifest.extra.fbAppId;
-            const fbAppSecret = Constants.manifest.extra.fbAppSecret;
+            const appId = Constants.manifest.extra.fbAppId;
+            // const fbAppSecret = Constants.manifest.extra.fbAppSecret;
 
-            await Facebook.initializeAsync( fbAppId ); // enter your Facebook App Id
+            // await Facebook.initializeAsync( { appId, appName: 'Hyways' } ); // enter your Facebook App Id
+            await Facebook.initializeAsync( appId ); // enter your Facebook App Id
 
             const { type, token } = await Facebook.logInWithReadPermissionsAsync({
               permissions: ['public_profile', 'email'],
@@ -183,7 +152,7 @@ const SignUpScreen = ({ navigation }) => {
 
             if (type === 'success') {
               // SENDING THE TOKEN TO FIREBASE TO HANDLE AUTH
-              const credential = auth.FacebookAuthProvider.credential(token);
+              const credential = firebase.auth.FacebookAuthProvider.credential( token );
               auth.signInWithCredential(credential)
                 .then(user => { // All the details about user are in here returned from firebase
                   console.log('Logged in successfully', user)
@@ -201,10 +170,6 @@ const SignUpScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }} mode="margin" edges={['right', 'bottom', 'left']} >
-        {/* <KeyboardAvoidingView
-            style={styles.container}
-            behavior={ Platform.OS === "ios" ? 'padding' : 'height' }
-        > */}
         <KeyboardAwareScrollView contentContainerStyle={{flex: 1}} extraScrollHeight={100} enableOnAndroid={true} 
    keyboardShouldPersistTaps='handled'>
 
@@ -307,20 +272,17 @@ const SignUpScreen = ({ navigation }) => {
                     <View style={{marginBottom:20,flexDirection:"row",alignItems:"center",justifyContent:"center"}}>
                         <TouchableOpacity
                             style={{marginHorizontal:10}}
-                            onPress={ accessToken ? getUserData : () => { promptAsync({
-                                showInRecents: true,
-                                useProxy: true
-                            }) } }
+                            onPress={() => promptAsync( { showInRecents: true, useProxy: true } ) }
                         >
                             <Image  style={{width: 34, height:34}} source={require( "../../assets/social-icons/google.png" )} />
                         </TouchableOpacity>
 
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             style={{marginHorizontal:10}}
                             onPress={() => console.log("INSTAGRAM Screen")}
                         >
                             <Image  style={{width: 34, height:34}} source={require( "../../assets/social-icons/instagram.png" )} />
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
 
                         <TouchableOpacity
                             style={{marginHorizontal:10}}
@@ -341,7 +303,7 @@ const SignUpScreen = ({ navigation }) => {
 
 
                 {/* <LineComponent /> */}
-                <View style={{flex:1,backgroundColor:"#00B906",width:192,maxHeight:5,marginBottom:25, marginTop:"auto"}} />
+                <View style={{flex:1,backgroundColor: colors.primaryColor,width:192,maxHeight:5,marginBottom:25, marginTop:"auto"}} />
 
             </View>
 

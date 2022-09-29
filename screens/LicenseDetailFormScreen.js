@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, SafeAreaView, Text, View, ActivityIndicator, Alert,  TouchableOpacity } from "react-native";
 import { useForm } from "react-hook-form";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+// import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constants from "expo-constants";
 
@@ -62,18 +63,15 @@ const LicenseDetailFormScreen = ( { navigation, route } ) => {
     });
 
     React.useEffect(() => {
-        console.log(Constants.manifest.extra)
+
         const serverCalls = async () => {
             try {
+                if( frontFaceData == '' || backFaceData == '' ) return;
                 const requestId = await AsyncStorage.getItem("requestId");
-                console.log( "start>>>>> ", requestId)
                 if( requestId ) {
                     setRequestId( requestId );
                     return;
                 }
-
-                // const { xRapidApiKey, xRapidApiHost, taskId, groupId } = Constants.manifest.extra;
-
                 const postOptions = {
                     method: 'POST',
                     headers: {
@@ -101,17 +99,22 @@ const LicenseDetailFormScreen = ( { navigation, route } ) => {
                         }
                         // return response.request_id ? response.request_id : null
                     })
-                    .catch(err => console.error(err))
+                    .catch(err => {
+                        console.error(err);
+                        Alert.alert( err.errors.detail );
+                    })
                     .finally(() => setLoading(false));
             }
             catch(error) {
                 console.log(error)
             }
+            setFrontFaceData('')
+            setBackFaceData('')
         };
         serverCalls();
 
-    // }, [frontFaceData, backFaceData])
-    }, [])
+    }, [frontFaceData, backFaceData])
+    // }, [])
 
     React.useEffect(() => {
         if( requestId ) {

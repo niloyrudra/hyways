@@ -126,7 +126,8 @@ const DrawerContent = ( { navigation } ) => {
 
         <CustomDrawerItem label="Sync with a telematic" onPress={() => navigation.navigate( "Home" )} />
 
-        <CustomDrawerItem label="Add More Vehicle" onPress={() => navigation.navigate( "LicenseFrontVerifier" )} />
+        {/* <CustomDrawerItem label="Add More Vehicle" onPress={() => navigation.navigate( "LicenseFrontVerifier" )} /> */}
+        <CustomDrawerItem label="Add More Vehicle" onPress={() => navigation.navigate( "VerificationStatus" )} />
 
         <CustomDrawerItem label="Track Your Car" onPress={() => navigation.navigate( "CarDetail" )} />
 

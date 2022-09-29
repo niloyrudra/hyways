@@ -39,17 +39,15 @@ const LicenseFrontCaptureScreen = ( { navigation, route } ) => {
         const getBarCodeScannerPermission = async () => {
             // const { status } = await BarCodeScanner.requestPermissionsAsync();
             
-            const { status } = await Camera.requestCameraPermissionsAsync()
+            const { status } = await Camera.requestCameraPermissionsAsync();
+
+            if (status !== 'granted') {
+                alert( "Permission is not granted!" );
+                return;
+            }
 
             setHasPermission( status === 'granted' );
 
-            // if (!permission) return 
-            // if (!permission.granted) {
-            //     alert( "Permission is not granted!" )
-            //     return;
-            // }
-
-            // setHasPermission( permission.granted )
         };
         getBarCodeScannerPermission();
     }, [] );
@@ -68,7 +66,6 @@ const LicenseFrontCaptureScreen = ( { navigation, route } ) => {
     }, [navigation]);
 
     React.useEffect(() => {
-        console.log("GET THE DATA>>>")
         if( scannedData ) navigation.navigate( "LicenseBackVerifier", { frontFaceData: scannedData } )
     }, [scannedData])
 
@@ -127,7 +124,7 @@ const LicenseFrontCaptureScreen = ( { navigation, route } ) => {
                                 backgroundColor: 'transparent',
                                 justifyContent: 'flex-end'
                             }}>
-                                <TouchableOpacity
+                                {/* <TouchableOpacity
                                     style={{
                                     flex: 0.1,
                                     alignSelf: 'flex-end'
@@ -140,18 +137,13 @@ const LicenseFrontCaptureScreen = ( { navigation, route } ) => {
                                     );
                                     }}>
                                     <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Flip </Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={{alignSelf: 'center'}} onPress={async() => {
+                                </TouchableOpacity> */}
+                                <TouchableOpacity style={{alignSelf: 'center', marginBottom: 10}} onPress={async() => {
                                     if(cameraRef){
                                         let photo = await cameraRef.takePictureAsync( { base64:true, quality:0 } );
-                                        // console.log('photo', photo);
                                         setScanned( true );
                                         if(photo?.base64) {
-                                            // console.log( `Bar code with type ${type} and photo?.url ${photo?.url} has been scanned!` );
                                             setScannedData(photo?.base64)
-
-                                            // console.log( photo )
-
                                             // navigation.navigate( "LicenseBackVerifier", { frontFaceData: scannedData } )
                                         }
                                     }

@@ -98,7 +98,7 @@ const LicenseBackCaptureScreen = ( { navigation, route } ) => {
                                 backgroundColor: 'transparent',
                                 justifyContent: 'flex-end'
                             }}>
-                                <TouchableOpacity
+                                {/* <TouchableOpacity
                                     style={{
                                     flex: 0.1,
                                     alignSelf: 'flex-end'
@@ -111,16 +111,12 @@ const LicenseBackCaptureScreen = ( { navigation, route } ) => {
                                     );
                                     }}>
                                     <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Flip </Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={{alignSelf: 'center'}} onPress={async() => {
+                                </TouchableOpacity> */}
+                                <TouchableOpacity style={{alignSelf: 'center', marginBottom: 10 }} onPress={async() => {
                                     if(cameraRef){
                                         let photo = await cameraRef.takePictureAsync( { base64:true, quality:0 } );
-
                                         setScanned( true );
-                                        if(photo?.base64) {
-                                            // console.log( `Bar code with type ${type} and photo?.base64 ${photo?.base64} has been scanned!` );
-                                            setBackFaceData(photo?.base64)
-                                        }
+                                        if(photo?.base64) setBackFaceData(photo?.base64)
                                     }
                                 }}>
                                     <View style={{ 
@@ -179,24 +175,7 @@ const LicenseBackCaptureScreen = ( { navigation, route } ) => {
                 {/* <View style={{ width:122,height:4,backgroundColor:colors.primaryColor,borderRadius:4, marginVertical:20 }} /> */}
 
                 {scanned &&
-                    <>
-                        <Text style={{fontSize:20,color:colors.dark,fontWeight:"900", color: colors.primaryColorTrans}}>Successfully completed</Text>
-
-                        {/* <TouchableOpacity
-                            style={{
-                                marginVertical: 30,
-                                // borderWidth: 1,
-                                paddingHorizontal: 20,
-                                paddingVertical: 10
-                            }}
-                            onPress={() => {
-                                setScanned(false);
-                                navigation.navigate("LicenseDetailForm")
-                            }}
-                        >
-                            <Text style={{ color: colors.primaryColor, textDecorationLine: "underline", textDecorationColor: colors.primaryColor, textTransform:"uppercase" }}>Proceed</Text>
-                        </TouchableOpacity> */}
-                    </>
+                    <Text style={{fontSize:20,color:colors.dark,fontWeight:"900", color: colors.primaryColorTrans}}>Successfully completed</Text>
                 }
 
             </View>
