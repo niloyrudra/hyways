@@ -97,24 +97,24 @@ const LicenseDetailFormScreen = ( { navigation, route } ) => {
                             setRequestId( response.request_id )
                             AsyncStorage.setItem( "requestId", response.request_id )
                         }
-                        // return response.request_id ? response.request_id : null
+                        if( response.errors ) Alert.alert( "Failed!", response.errors.detail );
                     })
                     .catch(err => {
                         console.error(err);
-                        Alert.alert( err.errors.detail );
+                        Alert.alert( "Failed!", err.errors.detail );
                     })
                     .finally(() => setLoading(false));
             }
             catch(error) {
                 console.log(error)
+                Alert.alert( "Failed!", error.errors.detail );
             }
             setFrontFaceData('')
             setBackFaceData('')
         };
         serverCalls();
 
-    }, [frontFaceData, backFaceData])
-    // }, [])
+    }, [ frontFaceData, backFaceData ] )
 
     React.useEffect(() => {
         if( requestId ) {
@@ -133,7 +133,11 @@ const LicenseDetailFormScreen = ( { navigation, route } ) => {
                     console.log( ">> GET Data >> ", response)
                     Alert.alert( response.status, response.message )
                 })
-                .catch(err => console.error(err));
+                .catch(err => {
+                    console.error(err);
+                    Alert.alert( "Failed!", err.errors.detail );
+                })
+                .finally(() => setLoading(false));
         }
         //   >> GET Data >>  Array [
         //     Object {

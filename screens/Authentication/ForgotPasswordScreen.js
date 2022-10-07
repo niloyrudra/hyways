@@ -10,9 +10,16 @@ import {
   TouchableOpacity,
 } from "react-native";
 import KeyboardAvoidingView from "react-native/Libraries/Components/Keyboard/KeyboardAvoidingView";
+import { auth } from "../../config/firebase";
 
 const ForgotPasswordScreen = () => {
-    const [phoneNumber, setPhoneNumber] = useState('');
+    // const [phoneNumber, setPhoneNumber] = useState('');
+    const [email, setEmail] = useState('');
+
+    // Handler
+    const passwordResetHandler = () => {
+      return auth.sendPasswordResetEmail( email )
+    }
 
   return (
     <KeyboardAvoidingView style={styles.container}>
@@ -32,15 +39,19 @@ const ForgotPasswordScreen = () => {
         <Image source={require("../../assets/icons/phone.png")} style={{position:"absolute",left:15,top:11,width:13.33,height:21.33}} />
         <TextInput
           style={styles.textInput}
-          placeholder="Phone Number"
+          placeholder= "Your E-mail" //"Phone Number"
           placeholderTextColor="#003f5c"
-          onChangeText={(number) => setPhoneNumber(number)}
+          onChangeText={(email) => setEmail(email)} // {(number) => setPhoneNumber(number)}
         />
       </View>
 
             
-      <TouchableOpacity style={styles.OTPBtn}>
-        <Text style={styles.OTPText}>SEND OTP</Text>
+      <TouchableOpacity
+        style={styles.OTPBtn}
+        onPress={ () => passwordResetHandler() }
+      >
+        {/* <Text style={styles.OTPText}>SEND OTP</Text> */}
+        <Text style={styles.OTPText}>SEND</Text>
       </TouchableOpacity>
 
     </KeyboardAvoidingView>

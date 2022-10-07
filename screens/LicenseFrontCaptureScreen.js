@@ -20,9 +20,12 @@ const LicenseFrontCaptureScreen = ( { navigation, route } ) => {
     const [ scannedData, setScannedData ] = useState(null);
     const [ audioStatus, setAudioStatus ] = useState("run");
 
+
     const [type, setType] = useState(CameraType.back);
     const [permission, requestPermission] = Camera.useCameraPermissions();
     const [cameraRef, setCameraRef] = useState(null)
+    const [isPreview, setIsPreview] = useState(false);
+
 
     const isFocused = useIsFocused();
 
@@ -34,6 +37,10 @@ const LicenseFrontCaptureScreen = ( { navigation, route } ) => {
         setScanned(false)
         setAudioStatus("stop")
     }
+    const cancelPreview = async () => {
+        await cameraRef.resumePreview();
+        setIsPreview(false);
+    };
 
     useEffect( () => {
         const getBarCodeScannerPermission = async () => {
@@ -66,8 +73,11 @@ const LicenseFrontCaptureScreen = ( { navigation, route } ) => {
     }, [navigation]);
 
     React.useEffect(() => {
-        if( scannedData ) navigation.navigate( "LicenseBackVerifier", { frontFaceData: scannedData } )
-    }, [scannedData])
+        if( scannedData ) {
+            cancelPreview();
+            navigation.navigate( "LicenseBackVerifier", { frontFaceData: scannedData } );
+        }
+    }, [ scannedData ])
 
     // const handleBarCodeScanned = ( { type, data } ) => {
     //     setScanned( true );
@@ -124,27 +134,15 @@ const LicenseFrontCaptureScreen = ( { navigation, route } ) => {
                                 backgroundColor: 'transparent',
                                 justifyContent: 'flex-end'
                             }}>
-                                {/* <TouchableOpacity
-                                    style={{
-                                    flex: 0.1,
-                                    alignSelf: 'flex-end'
-                                    }}
-                                    onPress={() => {
-                                    setType(
-                                        type === Camera.Constants.Type.back
-                                        ? Camera.Constants.Type.front
-                                        : Camera.Constants.Type.back
-                                    );
-                                    }}>
-                                    <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Flip </Text>
-                                </TouchableOpacity> */}
-                                <TouchableOpacity style={{alignSelf: 'center', marginBottom: 10}} onPress={async() => {
-                                    if(cameraRef){
-                                        let photo = await cameraRef.takePictureAsync( { base64:true, quality:0 } );
+                                <TouchableOpacity style={{alignSelf: 'center', marginBottom: 10}} onPress={ async () => {
+                                    if( cameraRef ){
+                                        let photo = await cameraRef.takePictureAsync( { base64:true, quality:0.7 } );
                                         setScanned( true );
-                                        if(photo?.base64) {
-                                            setScannedData(photo?.base64)
-                                            // navigation.navigate( "LicenseBackVerifier", { frontFaceData: scannedData } )
+                                        const source = photo.base64;
+
+                                        if (source) {
+                                            await cameraRef.pausePreview();
+                                            setIsPreview(true);
                                         }
                                     }
                                 }}>
@@ -197,20 +195,21 @@ const LicenseFrontCaptureScreen = ( { navigation, route } ) => {
                     <>
                         <Text style={{fontSize:20,color:colors.dark,fontWeight:"900", color: colors.primaryColorTrans}}>Successfully completed</Text>
 
-                        {/* <TouchableOpacity
+                        <TouchableOpacity
                             style={{
                                 marginVertical: 30,
-                                // borderWidth: 1,
+                                borderWidth: 1,
                                 paddingHorizontal: 20,
                                 paddingVertical: 10
                             }}
                             onPress={() => {
                                 setScanned(false);
-                                navigation.navigate("LicenseBackVerifier")
+                                cancelPreview();
+                                navigation.navigate( "LicenseBackVerifier", { frontFaceData: scannedData } );
                             }}
                         >
                             <Text style={{ color: colors.primaryColor, textDecorationLine: "underline", textDecorationColor: colors.primaryColor, textTransform:"uppercase" }}>Proceed</Text>
-                        </TouchableOpacity> */}
+                        </TouchableOpacity>
                     </>
                     :
                     <View

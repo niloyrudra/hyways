@@ -16,10 +16,16 @@ const LicenseBackCaptureScreen = ( { navigation, route } ) => {
     const [ backFaceData, setBackFaceData ] = useState( null );
     const [type, setType] = useState(CameraType.back);
     const [permission, requestPermission] = Camera.useCameraPermissions();
-    const [cameraRef, setCameraRef] = useState(null)
+    const [cameraRef, setCameraRef] = useState(null);
+    const [isPreview, setIsPreview] = useState(false);
 
     const isFocused = useIsFocused();
     
+    const cancelPreview = async () => {
+        await cameraRef.resumePreview();
+        setIsPreview(false);
+    };
+
     useEffect( () => {
         const getBarCodeScannerPermission = async () => {
             // const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -38,7 +44,10 @@ const LicenseBackCaptureScreen = ( { navigation, route } ) => {
     }, [navigation]);
 
     useEffect(() => {
-        if( backFaceData ) navigation.navigate( "LicenseDetailForm", { backFaceData: backFaceData, frontFaceData: frontFaceData } );
+        if( backFaceData ) {
+            cancelPreview();
+            navigation.navigate( "LicenseDetailForm", { backFaceData: backFaceData, frontFaceData: frontFaceData } );
+        }
     }, [backFaceData])
     
     // const handleBarCodeScanned = ( { type, data } ) => {
@@ -113,10 +122,15 @@ const LicenseBackCaptureScreen = ( { navigation, route } ) => {
                                     <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Flip </Text>
                                 </TouchableOpacity> */}
                                 <TouchableOpacity style={{alignSelf: 'center', marginBottom: 10 }} onPress={async() => {
-                                    if(cameraRef){
-                                        let photo = await cameraRef.takePictureAsync( { base64:true, quality:0 } );
+                                    if( cameraRef ){
+                                        let photo = await cameraRef.takePictureAsync( { base64:true, quality:0.7 } );
                                         setScanned( true );
-                                        if(photo?.base64) setBackFaceData(photo?.base64)
+                                        const source = photo.base64;
+
+                                        if (source) {
+                                            await cameraRef.pausePreview();
+                                            setIsPreview(true);
+                                        }
                                     }
                                 }}>
                                     <View style={{ 
@@ -142,18 +156,6 @@ const LicenseBackCaptureScreen = ( { navigation, route } ) => {
                             </View>
                         </Camera>
                     ) : null}
-                    {/* <BarCodeScanner
-                        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-                        style={{...StyleSheet.absoluteFillObject, top:-180, bottom:-180 }}
-                    /> */}
-
-                    {/* <Camera
-                        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-                        style={{
-                            width: "100%",
-                            height: 354
-                        }}
-                    /> */}
                 </View>
 
                 <View
@@ -175,7 +177,25 @@ const LicenseBackCaptureScreen = ( { navigation, route } ) => {
                 {/* <View style={{ width:122,height:4,backgroundColor:colors.primaryColor,borderRadius:4, marginVertical:20 }} /> */}
 
                 {scanned &&
+                <>
+
                     <Text style={{fontSize:20,color:colors.dark,fontWeight:"900", color: colors.primaryColorTrans}}>Successfully completed</Text>
+                    <TouchableOpacity
+                        style={{
+                            marginVertical: 30,
+                            borderWidth: 1,
+                            paddingHorizontal: 20,
+                            paddingVertical: 10
+                        }}
+                        onPress={() => {
+                            setScanned(false);
+                            cancelPreview();
+                            navigation.navigate( "LicenseDetailForm", { backFaceData: backFaceData, frontFaceData: frontFaceData } );
+                        }}
+                    >
+                        <Text style={{ color: colors.primaryColor, textDecorationLine: "underline", textDecorationColor: colors.primaryColor, textTransform:"uppercase" }}>Proceed</Text>
+                    </TouchableOpacity>
+                </>
                 }
 
             </View>
