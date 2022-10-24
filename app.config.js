@@ -5,7 +5,7 @@ export default {
     "name": "hyways",
     "slug": "hyways",
     "owner": "hywaysapp",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/logo/logo.png",
     "userInterfaceStyle": "light",

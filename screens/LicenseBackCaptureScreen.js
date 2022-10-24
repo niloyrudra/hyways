@@ -174,11 +174,8 @@ const LicenseBackCaptureScreen = ( { navigation, route } ) => {
                     >Scanning Will Happen Automatically</Text>
                 </View>
 
-                {/* <View style={{ width:122,height:4,backgroundColor:colors.primaryColor,borderRadius:4, marginVertical:20 }} /> */}
-
                 {scanned &&
                 <>
-
                     <Text style={{fontSize:20,color:colors.dark,fontWeight:"900", color: colors.primaryColorTrans}}>Successfully completed</Text>
                     <TouchableOpacity
                         style={{
