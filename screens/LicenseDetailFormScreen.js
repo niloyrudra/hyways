@@ -101,13 +101,13 @@ const LicenseDetailFormScreen = ( { navigation, route } ) => {
                     })
                     .catch(err => {
                         console.error(err);
-                        Alert.alert( "Failed!", err.errors.detail );
+                        //Alert.alert( "Failed!", err.errors.detail );
                     })
                     .finally(() => setLoading(false));
             }
             catch(error) {
                 console.log(error)
-                Alert.alert( "Failed!", error.errors.detail );
+                //Alert.alert( "Failed!", error.errors.detail );
             }
             setFrontFaceData('')
             setBackFaceData('')
@@ -135,7 +135,7 @@ const LicenseDetailFormScreen = ( { navigation, route } ) => {
                 })
                 .catch(err => {
                     console.error(err);
-                    Alert.alert( "Failed!", err.errors.detail );
+                    //Alert.alert( "Failed!", err.errors.detail );
                 })
                 .finally(() => setLoading(false));
         }
